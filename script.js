@@ -3,7 +3,7 @@ const config = {
     width: 800,
     height: 450,
     parent: 'game',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#c0c0c0',
 
     pixelArt: true,
 
