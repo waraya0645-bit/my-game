@@ -36,8 +36,12 @@ function create() {
     let startX = 0;
     let startY = 0;
 
-    // 指を動かしているか
+    // ドラッグ中かどうか
     let isDragging = false;
+
+
+    // Playerの移動速度
+    const speed = 300;
 
 
     // 指を置いたとき
@@ -56,51 +60,24 @@ function create() {
             return;
         }
 
-    });
 
-
-    // 指を離したとき
-    this.input.on('pointerup', (pointer) => {
-
-        if (!isDragging) {
-            return;
-        }
-
-        isDragging = false;
-
-
-        // スライドした距離
+        // 最初に指を置いた場所から現在の指の位置まで
         const dx = pointer.x - startX;
         const dy = pointer.y - startY;
 
 
-        // ほとんど動かしていなかったら何もしない
-        const swipeDistance = Math.sqrt(dx * dx + dy * dy);
-
-        if (swipeDistance < 10) {
-            return;
-        }
-
-
-        // スライドした方向の角度
+        // スライドしている方向の角度
         const angle = Math.atan2(dy, dx);
 
 
-        // Playerが進む距離
-        const distance = 200;
+        // Playerを一定速度で動かす
+        player.x += Math.cos(angle) * speed * (1 / 60);
+        player.y += Math.sin(angle) * speed * (1 / 60);
+    });
 
 
-        // 移動先
-        const targetX = player.x + Math.cos(angle) * distance;
-        const targetY = player.y + Math.sin(angle) * distance;
-
-
-        // Playerを移動
-        this.tweens.add({
-            targets: player,
-            x: targetX,
-            y: targetY,
-            duration: 500
-        });
+    // 指を離したとき
+    this.input.on('pointerup', () => {
+        isDragging = false;
     });
 }
