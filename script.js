@@ -19,16 +19,12 @@ const config = {
 const game = new Phaser.Game(config);
 
 function preload() {
+    this.load.image('player', './images/IMG_0410.png');
 }
 
 function create() {
-    const player = this.add.rectangle(
-        400,
-        225,
-        80,
-        80,
-        0xffffff
-    );
+    const player = this.add.image(400, 225, 'player');
+player.setDisplaySize(100, 100);
 
     this.input.on('pointerdown', (pointer) => {
         this.tweens.add({
