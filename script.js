@@ -22,7 +22,7 @@ const game = new Phaser.Game(config);
 
 
 function preload() {
-    this.load.image('player', './images/IMG_0410.png');
+    this.load.image('player', './images/player.png');
 }
 
 
