@@ -29,7 +29,7 @@ function preload() {
 function create() {
     const player = this.add.image(400, 225, 'player');
 
-    player.setDisplaySize(100, 100);
+    player.setDisplaySize(50, 50);
 
 
     // 指を置いた場所
@@ -41,7 +41,7 @@ function create() {
 
 
     // Playerの移動速度
-    const speed = 300;
+    const speed = 150;
 
 
     // 指を置いたとき
