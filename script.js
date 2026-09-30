@@ -29,7 +29,7 @@ function preload() {
 function create() {
     const player = this.add.image(400, 225, 'player');
 
-    player.setDisplaySize(50, 50);
+    player.setDisplaySize(100, 100);
 
 
     // 指を置いた場所
