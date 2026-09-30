@@ -5,7 +5,7 @@ const config = {
     parent: 'game',
     backgroundColor: '#ffffff',
 
-    pixelArt: false,
+    pixelArt: true,
 
     scale: {
         mode: Phaser.Scale.FIT,
@@ -23,7 +23,7 @@ const game = new Phaser.Game(config);
 
 
 function preload() {
-    this.load.image('player', './images/IMG_0410.png');
+    this.load.image('player', './images/player.png');
 }
 
 
