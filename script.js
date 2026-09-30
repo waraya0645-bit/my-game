@@ -27,7 +27,7 @@ function preload() {
 
 
 function create() {
-    const player = this.add.image(400, 225, 'player');
+    const player = this.add.image(80, 45, 'player');
 
     player.setDisplaySize(100, 100);
 
