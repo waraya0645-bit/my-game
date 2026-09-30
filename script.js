@@ -5,7 +5,7 @@ const config = {
     parent: 'game',
     backgroundColor: '#ffffff',
 
-    pixelArt: true,
+    pixelArt: false,
 
     scale: {
         mode: Phaser.Scale.FIT,
