@@ -4,7 +4,7 @@ const config = {
     height: 450,
     parent: 'game',
     backgroundColor: '#ffffff',
-
+    pixelArt: true,
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
