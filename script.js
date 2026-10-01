@@ -24,58 +24,127 @@ const game = new Phaser.Game(config);
 
 function preload() {
     this.load.image('player', './images/IMG_0410.png');
+    this.load.image('whiteCircle', './images/white_circle.png');
+    this.load.image('blackCircle', './images/black_circle.png');
 }
 
 
 function create() {
-    const player = this.add.image(400, 225, 'player');
 
-    // Playerを保存
+    // プレイヤー
+    const player = this.add.image(400, 225, 'player');
     this.player = player;
 
-    // 指を置いた場所
-    this.startX = 0;
-    this.startY = 0;
 
-    // 現在の指の位置
-    this.pointerX = 0;
-    this.pointerY = 0;
+    // =========================
+    // スティック
+    // =========================
 
-    // ドラッグ中かどうか
+    // 最初は画面中央
+    this.stickX = 400;
+    this.stickY = 225;
+
+    // 白い円
+    this.whiteCircle = this.add.image(
+        this.stickX,
+        this.stickY,
+        'whiteCircle'
+    );
+
+    // 黒い円
+    this.blackCircle = this.add.image(
+        this.stickX,
+        this.stickY,
+        'blackCircle'
+    );
+
+
+    // スティックの大きさ
+    this.whiteCircle.setDisplaySize(100, 100);
+    this.blackCircle.setDisplaySize(40, 40);
+
+
+    // 指を押しているか
     this.isDragging = false;
 
-    // Playerの速度
+
+    // プレイヤー速度
     this.speed = 300;
 
 
+    // =========================
     // 指を置いたとき
-    this.input.on('pointerdown', (pointer) => {
-        this.startX = pointer.x;
-        this.startY = pointer.y;
+    // =========================
 
-        this.pointerX = pointer.x;
-        this.pointerY = pointer.y;
+    this.input.on('pointerdown', (pointer) => {
+
+        // 白い円をタップした場所へ移動
+        this.stickX = pointer.x;
+        this.stickY = pointer.y;
+
+        this.whiteCircle.x = this.stickX;
+        this.whiteCircle.y = this.stickY;
+
+        // 黒い円を中央に戻す
+        this.blackCircle.x = this.stickX;
+        this.blackCircle.y = this.stickY;
 
         this.isDragging = true;
     });
 
 
+    // =========================
     // 指を動かしているとき
+    // =========================
+
     this.input.on('pointermove', (pointer) => {
 
         if (!this.isDragging) {
             return;
         }
 
-        // 指の現在位置だけ記録する
-        this.pointerX = pointer.x;
-        this.pointerY = pointer.y;
+
+        // 白い円の中心から指までの距離
+        const dx = pointer.x - this.stickX;
+        const dy = pointer.y - this.stickY;
+
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+
+        // 黒い円が動ける最大距離
+        const maxDistance = 30;
+
+
+        // 白い円の外へ出ないようにする
+        if (distance > maxDistance) {
+
+            const angle = Math.atan2(dy, dx);
+
+            this.blackCircle.x =
+                this.stickX + Math.cos(angle) * maxDistance;
+
+            this.blackCircle.y =
+                this.stickY + Math.sin(angle) * maxDistance;
+
+        } else {
+
+            this.blackCircle.x = pointer.x;
+            this.blackCircle.y = pointer.y;
+        }
     });
 
 
+    // =========================
     // 指を離したとき
+    // =========================
+
     this.input.on('pointerup', () => {
+
         this.isDragging = false;
+
+        // 黒い円を中央へ戻す
+        this.blackCircle.x = this.stickX;
+        this.blackCircle.y = this.stickY;
     });
 }
 
@@ -87,25 +156,25 @@ function update(time, delta) {
     }
 
 
-    // 最初に指を置いた場所から
-    // 現在の指の位置までの方向
-    const dx = this.pointerX - this.startX;
-    const dy = this.pointerY - this.startY;
+    // 白い円の中心から黒い円の中心への方向
+    const dx = this.blackCircle.x - this.stickX;
+    const dy = this.blackCircle.y - this.stickY;
 
 
-    // 指がほとんど動いていない場合は停止
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance < 10) {
+
+    // ほとんど動かしていなければ停止
+    if (distance < 5) {
         return;
     }
 
 
-    // スライド方向
+    // 移動方向
     const angle = Math.atan2(dy, dx);
 
 
-    // deltaを使って毎秒一定の速度で移動
+    // 毎秒一定の速度
     const moveAmount = this.speed * (delta / 1000);
 
 
