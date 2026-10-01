@@ -21,20 +21,17 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-
 function preload() {
     this.load.image('player', './images/IMG_0410.png');
     this.load.image('whiteCircle', './images/white_circle.png');
     this.load.image('blackCircle', './images/black_circle.png');
 }
 
-
 function create() {
 
     // プレイヤー
     const player = this.add.image(400, 225, 'player');
     this.player = player;
-
 
     // =========================
     // スティック
@@ -58,19 +55,15 @@ function create() {
         'blackCircle'
     );
 
-
     // スティックの大きさ
     this.whiteCircle.setDisplaySize(100, 100);
     this.blackCircle.setDisplaySize(40, 40);
 
-
     // 指を押しているか
     this.isDragging = false;
 
-
     // プレイヤー速度
     this.speed = 300;
-
 
     // =========================
     // 指を置いたとき
@@ -92,7 +85,6 @@ function create() {
         this.isDragging = true;
     });
 
-
     // =========================
     // 指を動かしているとき
     // =========================
@@ -103,13 +95,11 @@ function create() {
             return;
         }
 
-
         // 白い円の中心から指までの距離
         const dx = pointer.x - this.stickX;
         const dy = pointer.y - this.stickY;
 
         const distance = Math.sqrt(dx * dx + dy * dy);
-
 
         // 黒い円が動ける最大距離
         const maxDistance = 30;
@@ -133,7 +123,6 @@ function create() {
         }
     });
 
-
     // =========================
     // 指を離したとき
     // =========================
@@ -148,36 +137,29 @@ function create() {
     });
 }
 
-
 function update(time, delta) {
 
     if (!this.isDragging) {
         return;
     }
 
-
     // 白い円の中心から黒い円の中心への方向
     const dx = this.blackCircle.x - this.stickX;
     const dy = this.blackCircle.y - this.stickY;
 
-
     const distance = Math.sqrt(dx * dx + dy * dy);
-
 
     // ほとんど動かしていなければ停止
     if (distance < 5) {
         return;
     }
 
-
     // 移動方向
     const angle = Math.atan2(dy, dx);
 
-
     // 毎秒一定の速度
     const moveAmount = this.speed * (delta / 1000);
-
-
+    
     this.player.x += Math.cos(angle) * moveAmount;
     this.player.y += Math.sin(angle) * moveAmount;
 }
