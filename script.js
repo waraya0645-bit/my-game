@@ -1,7 +1,7 @@
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 450,
+    width: 960,
+    height: 540,
     parent: 'game',
     backgroundColor: '#c0c0c0',
 
@@ -30,7 +30,7 @@ function preload() {
 function create() {
 
     // プレイヤー
-    const player = this.add.image(400, 225, 'player');
+    const player = this.add.image(480, 270, 'player');
     this.player = player;
 
     // =========================
@@ -38,8 +38,8 @@ function create() {
     // =========================
 
     // 最初は画面中央
-    this.stickX = 400;
-    this.stickY = 225;
+    this.stickX = 235;
+    this.stickY = 135;
 
     // 白い円
     this.whiteCircle = this.add.image(
@@ -54,10 +54,6 @@ function create() {
         this.stickY,
         'blackCircle'
     );
-
-    // スティックの大きさ
-    this.whiteCircle.setDisplaySize(100, 100);
-    this.blackCircle.setDisplaySize(40, 40);
 
     // 指を押しているか
     this.isDragging = false;
