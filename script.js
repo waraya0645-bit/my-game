@@ -1,4 +1,5 @@
 // Deploy Preview test
+// test2
 const config = {
     type: Phaser.AUTO,
     width: 800,
