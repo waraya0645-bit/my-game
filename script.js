@@ -2,8 +2,8 @@
 // test2
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 450,
+    width: 940,
+    height: 540,
     parent: 'game',
     backgroundColor: '#c0c0c0',
 
@@ -40,8 +40,8 @@ function create() {
     // =========================
 
     // 最初は画面中央
-    this.stickX = 400;
-    this.stickY = 225;
+    this.stickX = 235;
+    this.stickY = 135;
 
     // 白い円
     this.whiteCircle = this.add.image(
