@@ -162,4 +162,20 @@ function update(time, delta) {
     
     this.player.x += Math.cos(angle) * moveAmount;
     this.player.y += Math.sin(angle) * moveAmount;
+
+    // 画面端から出ないようにする
+    const halfWidth = this.player.displayWidth / 2;
+    const halfHeight = this.player.displayHeight / 2;
+    
+    this.player.x = Phaser.Math.Clamp(
+        this.player.x,
+        halfWidth,
+        this.scale.width - halfWidth
+    );
+    
+    this.player.y = Phaser.Math.Clamp(
+        this.player.y,
+        halfHeight,
+        this.scale.height - halfHeight
+    );
 }
