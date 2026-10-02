@@ -40,7 +40,7 @@ function create() {
 
     // 最初は画面中央
 
-    this.stickX = this.scale.width / 4;
+    this.stickX = this.scale.width / 6;
     this.stickY = this.scale.height * 5 / 8;
 
     // 白い円
