@@ -32,7 +32,7 @@ function preload() {
 function create() {
 
     // プレイヤー
-    const player = this.add.image(400, 225, 'player');
+    const player = this.add.image(480, 270, 'player');
     this.player = player;
 
     // =========================
@@ -56,10 +56,6 @@ function create() {
         this.stickY,
         'blackCircle'
     );
-
-    // スティックの大きさ
-    this.whiteCircle.setDisplaySize(100, 100);
-    this.blackCircle.setDisplaySize(40, 40);
 
     // 指を押しているか
     this.isDragging = false;
