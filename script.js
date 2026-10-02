@@ -57,6 +57,8 @@ function create() {
         'blackCircle'
     );
 
+    this.whiteCircle.setAlpha(0.5);
+    this.blackCircle.setAlpha(0.5);
     // 指を押しているか
     this.isDragging = false;
 
