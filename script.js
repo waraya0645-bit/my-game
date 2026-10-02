@@ -2,7 +2,7 @@
 // test2
 const config = {
     type: Phaser.AUTO,
-    width: 940,
+    width: 960,
     height: 540,
     parent: 'game',
     backgroundColor: '#c0c0c0',
@@ -40,6 +40,7 @@ function create() {
     // =========================
 
     // 最初は画面中央
+
     this.stickX = this.scale.width / 4;
     this.stickY = this.scale.height * 3 / 4;
 
