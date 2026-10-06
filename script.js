@@ -353,14 +353,14 @@ if (currentRow) {
         }
     }
 
-    // =================================
+// =================================
 // 見た目の画像
 // =================================
 
 let offsetX = 0;
 let offsetY = 0;
 
-// 近くの壁によって、見た目の画像が壁に入り込まないようにする
+// 最大でも4pxまでにする
 for (let row = 0; row < this.mapData.length; row++) {
 
     for (let col = 0; col < this.mapData[row].length; col++) {
@@ -372,9 +372,8 @@ for (let row = 0; row < this.mapData.length; row++) {
         const wallLeft = col * 64;
         const wallRight = wallLeft + 64;
         const wallTop = row * 64;
-        const wallBottom = wallTop + 64;
+        const wallBottom = row * 64 + 64;
 
-        // プレイヤーの見た目の範囲
         const visualLeft =
             this.playerBody.x - visualHalfSize;
 
@@ -388,10 +387,7 @@ for (let row = 0; row < this.mapData.length; row++) {
             this.playerBody.y + visualHalfSize;
 
 
-        // -------------------------
         // 左側の壁
-        // -------------------------
-
         if (
             visualLeft < wallRight &&
             visualRight > wallRight &&
@@ -402,16 +398,14 @@ for (let row = 0; row < this.mapData.length; row++) {
             const amount =
                 wallRight - visualLeft;
 
-            if (amount <= visualOffset) {
-                offsetX += amount;
-            }
+            offsetX = Math.min(
+                visualOffset,
+                Math.max(offsetX, amount)
+            );
         }
 
 
-        // -------------------------
         // 右側の壁
-        // -------------------------
-
         if (
             visualRight > wallLeft &&
             visualLeft < wallLeft &&
@@ -422,16 +416,14 @@ for (let row = 0; row < this.mapData.length; row++) {
             const amount =
                 visualRight - wallLeft;
 
-            if (amount <= visualOffset) {
-                offsetX -= amount;
-            }
+            offsetX = Math.max(
+                -visualOffset,
+                Math.min(offsetX, -amount)
+            );
         }
 
 
-        // -------------------------
         // 上側の壁
-        // -------------------------
-
         if (
             visualTop < wallBottom &&
             visualBottom > wallBottom &&
@@ -442,16 +434,14 @@ for (let row = 0; row < this.mapData.length; row++) {
             const amount =
                 wallBottom - visualTop;
 
-            if (amount <= visualOffset) {
-                offsetY += amount;
-            }
+            offsetY = Math.min(
+                visualOffset,
+                Math.max(offsetY, amount)
+            );
         }
 
 
-        // -------------------------
         // 下側の壁
-        // -------------------------
-
         if (
             visualBottom > wallTop &&
             visualTop < wallTop &&
@@ -462,9 +452,10 @@ for (let row = 0; row < this.mapData.length; row++) {
             const amount =
                 visualBottom - wallTop;
 
-            if (amount <= visualOffset) {
-                offsetY -= amount;
-            }
+            offsetY = Math.max(
+                -visualOffset,
+                Math.min(offsetY, -amount)
+            );
         }
     }
 }
