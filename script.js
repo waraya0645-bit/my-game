@@ -195,7 +195,7 @@ function update(time, delta) {
     const moveAmount = this.speed * (delta / 1000);
 
     // 当たり判定
-    const halfSize = 30;
+    const halfSize = 28;
 
     // 見た目の画像
     const visualHalfSize = 32;
