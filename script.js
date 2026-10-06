@@ -182,14 +182,63 @@ function update(time, delta) {
         return;
     }
 
-    const dx = this.blackCircle.x - this.stickX;
-    const dy = this.blackCircle.y - this.stickY;
+    let dx = this.blackCircle.x - this.stickX;
+    let dy = this.blackCircle.y - this.stickY;
 
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance < 5) {
         return;
     }
+
+// =========================
+// 3方向が壁に囲まれているか
+// =========================
+
+const tileX =
+    Math.floor(this.playerBody.x / 64);
+
+const tileY =
+    Math.floor(this.playerBody.y / 64);
+
+const up =
+    this.mapData[tileY - 1]?.[tileX] === 1;
+
+const down =
+    this.mapData[tileY + 1]?.[tileX] === 1;
+
+const left =
+    this.mapData[tileY]?.[tileX - 1] === 1;
+
+const right =
+    this.mapData[tileY]?.[tileX + 1] === 1;
+
+const wallCount =
+    Number(up) +
+    Number(down) +
+    Number(left) +
+    Number(right);
+
+
+// 3方向が壁なら、壁方向への入力を消す
+if (wallCount === 3) {
+
+    if (up && dy > 0) {
+        dy = 0;
+    }
+
+    if (down && dy < 0) {
+        dy = 0;
+    }
+
+    if (left && dx > 0) {
+        dx = 0;
+    }
+
+    if (right && dx < 0) {
+        dx = 0;
+    }
+}
 
     const angle = Math.atan2(dy, dx);
     const moveAmount = this.speed * (delta / 1000);
@@ -202,8 +251,7 @@ function update(time, delta) {
 
     // 見た目だけ2px外側へ
     const visualOffset = 4;
-
-
+    
     // =================================
     // 壁にぶつかっているか調べる関数
     // =================================
