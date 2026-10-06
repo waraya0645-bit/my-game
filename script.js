@@ -62,15 +62,15 @@ function create() {
         }
     }
     
-    const player = this.add.image(480, 270, 'player');
+    const player = this.add.image(256, 256, 'player');
 
     this.player = player;
 
     // 当たり判定用の座標
     
     this.playerBody = {
-        x: 64,
-        y: 64
+        x: 256,
+        y: 256
     };
 
     // =========================
