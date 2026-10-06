@@ -41,7 +41,7 @@ function create() {
     [1,0,0,0,0,0,0,0,0,1],
     [1,1,1,1,1,1,1,1,1,1]
     ];
-    const tileSize = 32;
+    const tileSize = 64;
     for (let y = 0; y < mapData.length; y++) {
         for (let x = 0; x < mapData[y].length; x++) {
 
