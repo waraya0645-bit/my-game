@@ -353,7 +353,7 @@ function update(time, delta) {
 
             this.playerBody.y +=
         
-                (centerY - this.playerBody.y) * 0.15;
+                (centerY - this.playerBody.y) * 1;
         }
     }
 
