@@ -31,7 +31,7 @@ function preload() {
 }
 
 function create() {
-    const mapData = [
+    this mapData = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -209,4 +209,20 @@ function update(time, delta) {
         halfHeight,
         this.scale.height - halfHeight
     );
+    // 移動先
+    const nextX = this.player.x + Math.cos(angle) * moveAmount;
+    const nextY = this.player.y + Math.sin(angle) * moveAmount;
+
+    // 移動先のタイル
+    const nextTileX = Math.floor(nextX / 64);
+    const nextTileY = Math.floor(nextY / 64);
+
+    const nextTile = this.mapData[nextTileY][nextTileX];
+
+    // 壁でなければ移動
+    if (nextTile === 0) {
+        this.player.x = nextX;
+        this.player.y = nextY;
+    }
+    const currentTile = this.mapData[tileY][tileX];
 }
