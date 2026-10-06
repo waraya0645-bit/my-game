@@ -281,5 +281,25 @@ const canMoveY =
 
 if (canMoveY) {
     this.player.y = nextY;
+} else {
+
+    if (nextY > this.player.y) {
+        // 下の壁
+        const wallY = Math.floor(
+            (nextY + halfSize - 1) / 64
+        );
+
+        this.player.y =
+            wallY * 64 - 32;
+
+    } else {
+        // 上の壁
+        const wallY = Math.floor(
+            (nextY - halfSize) / 64
+        );
+
+        this.player.y =
+            (wallY + 1) * 64 + 32;
+    }
 }
 }
