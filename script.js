@@ -201,7 +201,7 @@ function update(time, delta) {
     const visualHalfSize = 32;
 
     // 見た目だけ2px外側へ
-    const visualOffset = 4;
+    const visualOffset = 2;
     
     // =================================
     // 壁にぶつかっているか調べる関数
