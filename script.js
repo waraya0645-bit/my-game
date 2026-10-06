@@ -302,10 +302,140 @@ function update(time, delta) {
                 );
 
             this.playerBody.x =
-                wallX * 64 - halfSize;
+function update(time, delta) {
 
-            // 画像を左へ2px
-            offsetX = -visualOffset;
+    if (!this.isDragging) {
+        return;
+    }
+
+    // =========================
+    // スティックの方向
+    // =========================
+
+    const dx = this.blackCircle.x - this.stickX;
+    const dy = this.blackCircle.y - this.stickY;
+
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < 5) {
+        return;
+    }
+
+    const angle = Math.atan2(dy, dx);
+
+    const moveAmount = this.speed * (delta / 1000);
+
+
+    // =========================
+    // サイズ
+    // =========================
+
+    const halfSize = 30;       // 当たり判定 60×60
+    const visualHalfSize = 32; // 画像 64×64
+
+    const visualOffset = visualHalfSize - halfSize;
+    // 32 - 30 = 2px
+
+
+    // =========================
+    // 次に移動する座標
+    // =========================
+
+    const nextX =
+        this.playerBody.x +
+        Math.cos(angle) * moveAmount;
+
+    const nextY =
+        this.playerBody.y +
+        Math.sin(angle) * moveAmount;
+
+
+    // =========================
+    // X方向の衝突判定
+    // =========================
+
+    const bodyYTop =
+        Math.floor(
+            (this.playerBody.y - halfSize) / 64
+        );
+
+    const bodyYBottom =
+        Math.floor(
+            (this.playerBody.y + halfSize - 1) / 64
+        );
+
+    const nextXLeft =
+        Math.floor(
+            (nextX - halfSize) / 64
+        );
+
+    const nextXRight =
+        Math.floor(
+            (nextX + halfSize - 1) / 64
+        );
+
+    const canMoveX =
+        this.mapData[bodyYTop]?.[nextXLeft] === 0 &&
+        this.mapData[bodyYTop]?.[nextXRight] === 0 &&
+        this.mapData[bodyYBottom]?.[nextXLeft] === 0 &&
+        this.mapData[bodyYBottom]?.[nextXRight] === 0;
+
+
+    // =========================
+    // Y方向の衝突判定
+    // =========================
+
+    const bodyXLeft =
+        Math.floor(
+            (this.playerBody.x - halfSize) / 64
+        );
+
+    const bodyXRight =
+        Math.floor(
+            (this.playerBody.x + halfSize - 1) / 64
+        );
+
+    const nextYTop =
+        Math.floor(
+            (nextY - halfSize) / 64
+        );
+
+    const nextYBottom =
+        Math.floor(
+            (nextY + halfSize - 1) / 64
+        );
+
+    const canMoveY =
+        this.mapData[nextYTop]?.[bodyXLeft] === 0 &&
+        this.mapData[nextYTop]?.[bodyXRight] === 0 &&
+        this.mapData[nextYBottom]?.[bodyXLeft] === 0 &&
+        this.mapData[nextYBottom]?.[bodyXRight] === 0;
+
+
+    // =========================
+    // X方向を移動
+    // =========================
+
+    let hitX = false;
+
+    if (canMoveX) {
+
+        this.playerBody.x = nextX;
+
+    } else {
+
+        hitX = true;
+
+        if (dx > 0) {
+
+            // 右の壁
+            const wallX =
+                Math.floor(
+                    (nextX + halfSize) / 64
+                );
+
+            this.playerBody.x =
+                wallX * 64 - halfSize;
 
         } else {
 
@@ -317,16 +447,15 @@ function update(time, delta) {
 
             this.playerBody.x =
                 (wallX + 1) * 64 + halfSize;
-
-            // 画像を右へ2px
-            offsetX = visualOffset;
         }
     }
 
 
     // =========================
-    // Y方向
+    // Y方向を移動
     // =========================
+
+    let hitY = false;
 
     if (canMoveY) {
 
@@ -334,7 +463,9 @@ function update(time, delta) {
 
     } else {
 
-        if (nextY > this.playerBody.y) {
+        hitY = true;
+
+        if (dy > 0) {
 
             // 下の壁
             const wallY =
@@ -344,9 +475,6 @@ function update(time, delta) {
 
             this.playerBody.y =
                 wallY * 64 - halfSize;
-
-            // 画像を上へ2px
-            offsetY = -visualOffset;
 
         } else {
 
@@ -358,15 +486,29 @@ function update(time, delta) {
 
             this.playerBody.y =
                 (wallY + 1) * 64 + halfSize;
-
-            // 画像を下へ2px
-            offsetY = visualOffset;
         }
     }
 
 
     // =========================
-    // 見た目の画像を配置
+    // 見た目の画像をずらす
+    // =========================
+
+    let offsetX = 0;
+    let offsetY = 0;
+
+
+    if (hitX) {
+        offsetX = -Math.sign(dx) * visualOffset;
+    }
+
+    if (hitY) {
+        offsetY = -Math.sign(dy) * visualOffset;
+    }
+
+
+    // =========================
+    // 画像を表示
     // =========================
 
     this.player.x =
