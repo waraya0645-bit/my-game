@@ -61,9 +61,17 @@ function create() {
             }
         }
     }
-    // プレイヤー
+    
     const player = this.add.image(480, 270, 'player');
+
     this.player = player;
+
+    // 当たり判定用の座標
+    
+    this.playerBody = {
+        x: 480,
+        y: 270
+    };
 
     // =========================
     // スティック
@@ -174,132 +182,197 @@ function update(time, delta) {
         return;
     }
 
-    // 白い円の中心から黒い円の中心への方向
     const dx = this.blackCircle.x - this.stickX;
     const dy = this.blackCircle.y - this.stickY;
 
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    // ほとんど動かしていなければ停止
     if (distance < 5) {
         return;
     }
 
-    // 移動方向
     const angle = Math.atan2(dy, dx);
 
-    // 毎秒一定の速度
     const moveAmount = this.speed * (delta / 1000);
 
-    // 移動先の座標
-    const nextX = this.player.x + Math.cos(angle) * moveAmount;
-    const nextY = this.player.y + Math.sin(angle) * moveAmount;
-// 当たり判定の半分の大きさ
-const halfSize = 30;
+    const halfSize = 30;       // 当たり判定は60×60
+    const visualHalfSize = 32; // 画像は64×64
 
-// 画像の半分の大きさ
-const visualHalfSize = 32;
-
-// =========================
-// X方向の移動
-// =========================
-
-const canMoveX =
-    this.mapData[Math.floor((this.player.y - halfSize) / 64)]?.[
-        Math.floor((nextX - halfSize) / 64)
-    ] === 0 &&
-    this.mapData[Math.floor((this.player.y - halfSize) / 64)]?.[
-        Math.floor((nextX + halfSize - 1) / 64)
-    ] === 0 &&
-    this.mapData[Math.floor((this.player.y + halfSize - 1) / 64)]?.[
-        Math.floor((nextX - halfSize) / 64)
-    ] === 0 &&
-    this.mapData[Math.floor((this.player.y + halfSize - 1) / 64)]?.[
-        Math.floor((nextX + halfSize - 1) / 64)
-    ] === 0;
+    const visualOffset = visualHalfSize - halfSize;
+    // → 2px
 
 
-if (canMoveX) {
+    // =========================
+    // 次の位置
+    // =========================
 
-    this.player.x = nextX;
+    const nextX =
+        this.playerBody.x +
+        Math.cos(angle) * moveAmount;
 
-} else {
+    const nextY =
+        this.playerBody.y +
+        Math.sin(angle) * moveAmount;
 
-    if (nextX > this.player.x) {
 
-        // 右の壁
-        const wallX = Math.floor(
-            (nextX + visualHalfSize) / 64
-        );
+    // =========================
+    // X方向の判定
+    // =========================
 
-        this.player.x =
-            wallX * 64 - visualHalfSize;
+    const canMoveX =
+        this.mapData[
+            Math.floor((this.playerBody.y - halfSize) / 64)
+        ]?.[
+            Math.floor((nextX - halfSize) / 64)
+        ] === 0 &&
+
+        this.mapData[
+            Math.floor((this.playerBody.y - halfSize) / 64)
+        ]?.[
+            Math.floor((nextX + halfSize - 1) / 64)
+        ] === 0 &&
+
+        this.mapData[
+            Math.floor((this.playerBody.y + halfSize - 1) / 64)
+        ]?.[
+            Math.floor((nextX - halfSize) / 64)
+        ] === 0 &&
+
+        this.mapData[
+            Math.floor((this.playerBody.y + halfSize - 1) / 64)
+        ]?.[
+            Math.floor((nextX + halfSize - 1) / 64)
+        ] === 0;
+
+
+    // =========================
+    // Y方向の判定
+    // =========================
+
+    const canMoveY =
+        this.mapData[
+            Math.floor((nextY - halfSize) / 64)
+        ]?.[
+            Math.floor((this.playerBody.x - halfSize) / 64)
+        ] === 0 &&
+
+        this.mapData[
+            Math.floor((nextY - halfSize) / 64)
+        ]?.[
+            Math.floor((this.playerBody.x + halfSize - 1) / 64)
+        ] === 0 &&
+
+        this.mapData[
+            Math.floor((nextY + halfSize - 1) / 64)
+        ]?.[
+            Math.floor((this.playerBody.x - halfSize) / 64)
+        ] === 0 &&
+
+        this.mapData[
+            Math.floor((nextY + halfSize - 1) / 64)
+        ]?.[
+            Math.floor((this.playerBody.x + halfSize - 1) / 64)
+        ] === 0;
+
+
+    // =========================
+    // 見た目のズレ
+    // =========================
+
+    let offsetX = 0;
+    let offsetY = 0;
+
+
+    // =========================
+    // X方向
+    // =========================
+
+    if (canMoveX) {
+
+        this.playerBody.x = nextX;
+
+    } else {
+
+        if (nextX > this.playerBody.x) {
+
+            // 右の壁
+            const wallX =
+                Math.floor(
+                    (nextX + halfSize) / 64
+                );
+
+            this.playerBody.x =
+                wallX * 64 - halfSize;
+
+            // 画像を左へ2px
+            offsetX = -visualOffset;
+
+        } else {
+
+            // 左の壁
+            const wallX =
+                Math.floor(
+                    (nextX - halfSize) / 64
+                );
+
+            this.playerBody.x =
+                (wallX + 1) * 64 + halfSize;
+
+            // 画像を右へ2px
+            offsetX = visualOffset;
+        }
+    }
+
+
+    // =========================
+    // Y方向
+    // =========================
+
+    if (canMoveY) {
+
+        this.playerBody.y = nextY;
 
     } else {
 
-        // 左の壁
-        const wallX = Math.floor(
-            (nextX - visualHalfSize) / 64
-        );
+        if (nextY > this.playerBody.y) {
 
-        this.player.x =
-            (wallX + 1) * 64 + visualHalfSize;
+            // 下の壁
+            const wallY =
+                Math.floor(
+                    (nextY + halfSize) / 64
+                );
 
+            this.playerBody.y =
+                wallY * 64 - halfSize;
+
+            // 画像を上へ2px
+            offsetY = -visualOffset;
+
+        } else {
+
+            // 上の壁
+            const wallY =
+                Math.floor(
+                    (nextY - halfSize) / 64
+                );
+
+            this.playerBody.y =
+                (wallY + 1) * 64 + halfSize;
+
+            // 画像を下へ2px
+            offsetY = visualOffset;
+        }
     }
-}
 
 
-// =========================
-// Y方向の移動
-// =========================
+    // =========================
+    // 見た目の画像を配置
+    // =========================
 
-const canMoveY =
-    this.mapData[
-        Math.floor((nextY - halfSize) / 64)
-    ]?.[
-        Math.floor((this.player.x - halfSize) / 64)
-    ] === 0 &&
+    this.player.x =
+        this.playerBody.x + offsetX;
 
-    this.mapData[
-        Math.floor((nextY - halfSize) / 64)
-    ]?.[
-        Math.floor((this.player.x + halfSize - 1) / 64)
-    ] === 0 &&
-
-    this.mapData[
-        Math.floor((nextY + halfSize - 1) / 64)
-    ]?.[
-        Math.floor((this.player.x - halfSize) / 64)
-    ] === 0 &&
-
-    this.mapData[
-        Math.floor((nextY + halfSize - 1) / 64)
-    ]?.[
-        Math.floor((this.player.x + halfSize - 1) / 64)
-    ] === 0;
-
-
-if (canMoveY) {
-    this.player.y = nextY;
-} else {
-
-    if (nextY > this.player.y) {
-        // 下の壁
-        const wallY = Math.floor(
-            (nextY + halfSize - 1) / 64
-        );
-
-        this.player.y =
-            wallY * 64 - 32;
-
-    } else {
-        // 上の壁
-        const wallY = Math.floor(
-            (nextY - halfSize) / 64
-        );
-
-        this.player.y =
-            (wallY + 1) * 64 + 32;
-    }
+    this.player.y =
+        this.playerBody.y + offsetY;
 }
 }
