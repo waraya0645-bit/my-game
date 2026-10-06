@@ -375,14 +375,6 @@ if (wallCount === 3) {
         Math.floor(this.playerBody.y / 64) * 64 + 32;
 
     // 上下が壁で挟まれている場合
-    const tileX =
-
-        Math.floor(this.playerBody.x / 64);
-
-    const tileY =
-
-        Math.floor(this.playerBody.y / 64);
-
     const currentRow = this.mapData[tileY];
 
     if (currentRow) {
