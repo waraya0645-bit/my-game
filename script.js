@@ -200,7 +200,6 @@ const halfSize = 30;
 // 画像の半分の大きさ
 const visualHalfSize = 32;
 
-
 // =========================
 // X方向の移動
 // =========================
@@ -281,31 +280,6 @@ const canMoveY =
 
 
 if (canMoveY) {
-
     this.player.y = nextY;
-
-} else {
-
-    if (nextY > this.player.y) {
-
-        // 下の壁
-        const wallY = Math.floor(
-            (nextY + visualHalfSize) / 64
-        );
-
-        this.player.y =
-            wallY * 64 - visualHalfSize;
-
-    } else {
-
-        // 上の壁
-        const wallY = Math.floor(
-            (nextY - visualHalfSize) / 64
-        );
-
-        this.player.y =
-            (wallY + 1) * 64 + visualHalfSize;
-
-    }
 }
 }
