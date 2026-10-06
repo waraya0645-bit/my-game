@@ -31,7 +31,36 @@ function preload() {
 }
 
 function create() {
+    const mapData = [
+    [1,1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,1,1,0,0,0,1],
+    [1,0,0,0,1,1,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1]
+    ];
+    const tileSize = 32;
+    for (let y = 0; y < mapData.length; y++) {
+        for (let x = 0; x < mapData[y].length; x++) {
 
+            if (mapData[y][x] === 0) {
+                this.add.image(
+                    x * tileSize + tileSize / 2,
+                    y * tileSize + tileSize / 2,
+                    'floor'
+                );
+            }
+            if (mapData[y][x] === 1) {
+                this.add.image(
+                    x * tileSize + tileSize / 2,
+                    y * tileSize + tileSize / 2,
+                    'wall'
+                );
+            }
+        }
+    }
     // プレイヤー
     const player = this.add.image(480, 270, 'player');
     this.player = player;
