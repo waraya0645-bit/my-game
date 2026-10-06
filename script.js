@@ -346,7 +346,7 @@ if (currentRow) {
             this.mapData[tileY + 1]?.[tileX] === 1;
 
 
-        if (upperWall && lowerWall) {
+        if (upperWall && lowerWall && !hitY.hit) {
 
             this.playerBody.y +=
         
