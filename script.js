@@ -197,21 +197,27 @@ function update(time, delta) {
 // プレイヤーの半分の大きさ
 const halfSize = 32;
 
-// プレイヤーの四隅が入るタイルを調べる
-const left   = Math.floor((nextX - halfSize) / 64);
-const right  = Math.floor((nextX + halfSize - 1) / 64);
-const top    = Math.floor((nextY - halfSize) / 64);
-const bottom = Math.floor((nextY + halfSize - 1) / 64);
+// X方向だけ移動できるか調べる
+const canMoveX =
+    this.mapData[Math.floor((this.player.y - halfSize) / 64)]?.[Math.floor((nextX - halfSize) / 64)] === 0 &&
+    this.mapData[Math.floor((this.player.y - halfSize) / 64)]?.[Math.floor((nextX + halfSize - 1) / 64)] === 0 &&
+    this.mapData[Math.floor((this.player.y + halfSize - 1) / 64)]?.[Math.floor((nextX - halfSize) / 64)] === 0 &&
+    this.mapData[Math.floor((this.player.y + halfSize - 1) / 64)]?.[Math.floor((nextX + halfSize - 1) / 64)] === 0;
 
-// 四隅すべてが床なら移動
-const canMove =
-    this.mapData[top]?.[left] === 0 &&
-    this.mapData[top]?.[right] === 0 &&
-    this.mapData[bottom]?.[left] === 0 &&
-    this.mapData[bottom]?.[right] === 0;
+// Y方向だけ移動できるか調べる
+const canMoveY =
+    this.mapData[Math.floor((nextY - halfSize) / 64)]?.[Math.floor((this.player.x - halfSize) / 64)] === 0 &&
+    this.mapData[Math.floor((nextY - halfSize) / 64)]?.[Math.floor((this.player.x + halfSize - 1) / 64)] === 0 &&
+    this.mapData[Math.floor((nextY + halfSize - 1) / 64)]?.[Math.floor((this.player.x - halfSize) / 64)] === 0 &&
+    this.mapData[Math.floor((nextY + halfSize - 1) / 64)]?.[Math.floor((this.player.x + halfSize - 1) / 64)] === 0;
 
-if (canMove) {
+// X方向だけ通れるならX方向へ
+if (canMoveX) {
     this.player.x = nextX;
+}
+
+// Y方向だけ通れるならY方向へ
+if (canMoveY) {
     this.player.y = nextY;
 }
 }
