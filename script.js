@@ -211,15 +211,19 @@ const canMoveY =
     this.mapData[Math.floor((nextY + halfSize - 1) / 64)]?.[Math.floor((this.player.x - halfSize) / 64)] === 0 &&
     this.mapData[Math.floor((nextY + halfSize - 1) / 64)]?.[Math.floor((this.player.x + halfSize - 1) / 64)] === 0;
 
-// X方向だけ通れるならX方向へ
 if (canMoveX) {
     this.player.x = nextX;
 } else {
-    // X方向で壁にぶつかった場合、壁ギリギリまで寄せる
+
     if (nextX > this.player.x) {
-        this.player.x = Math.floor(nextX / 64) * 64 - halfSize;
+        // 右の壁にぶつかった
+        const wallX = Math.floor((nextX + halfSize - 1) / 64);
+        this.player.x = wallX * 64 - halfSize;
+
     } else {
-        this.player.x = Math.floor(nextX / 64 + 1) * 64 + halfSize;
+        // 左の壁にぶつかった
+        const wallX = Math.floor((nextX - halfSize) / 64);
+        this.player.x = (wallX + 1) * 64 + halfSize;
     }
 }
 
