@@ -393,7 +393,7 @@ if (wallCount === 3) {
 
             this.playerBody.y +=
         
-                (centerY - this.playerBody.y) * 1;
+                (centerY - this.playerBody.y) * 0.15;
         }
     }
 
