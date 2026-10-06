@@ -313,7 +313,49 @@ function update(time, delta) {
                 hitY.bottom + halfSize;
         }
     }
+    
+    // =================================
+    // 1タイル幅の道への軽い吸着
+    // =================================
 
+    const centerX =
+
+        Math.floor(this.playerBody.x / 64) * 64 + 32;
+
+    const centerY =
+
+        Math.floor(this.playerBody.y / 64) * 64 + 32;
+
+    // 上下が壁で挟まれている場合
+    const tileX =
+
+        Math.floor(this.playerBody.x / 64);
+
+    const tileY =
+
+        Math.floor(this.playerBody.y / 64);
+
+    const currentRow = this.mapData[tileY];
+
+    if (currentRow) {
+
+        const upperWall =
+    
+            this.mapData[tileY - 1]?.[tileX] === 1;
+
+
+        const lowerWall =
+    
+            this.mapData[tileY + 1]?.[tileX] === 1;
+
+
+        if (upperWall && lowerWall) {
+
+            this.playerBody.y +=
+        
+                (centerY - this.playerBody.y) * 0.15;
+        }
+    }
 
     // =================================
     // 見た目の画像
