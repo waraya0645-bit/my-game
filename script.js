@@ -219,27 +219,30 @@ const wallCount =
     Number(left) +
     Number(right);
 
-
-// 3方向が壁なら、壁方向への入力を消す
+// 3方向が壁なら、開いている方向だけに動かす
 if (wallCount === 3) {
 
-    if (up && dy > 0) {
+    if (!up) {
+        dx = 0;
+        dy = -Math.abs(dy);
+    }
+
+    if (!down) {
+        dx = 0;
+        dy = Math.abs(dy);
+    }
+
+    if (!left) {
+        dx = -Math.abs(dx);
         dy = 0;
     }
 
-    if (down && dy < 0) {
+    if (!right) {
+        dx = Math.abs(dx);
         dy = 0;
-    }
-
-    if (left && dx > 0) {
-        dx = 0;
-    }
-
-    if (right && dx < 0) {
-        dx = 0;
     }
 }
-
+    
     const angle = Math.atan2(dy, dx);
     const moveAmount = this.speed * (delta / 1000);
 
