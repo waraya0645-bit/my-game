@@ -361,11 +361,11 @@ if (currentRow) {
     let offsetX = 0;
     let offsetY = 0;
 
-    if (hitX.hit) {
+    if (hitX.hit && Math.abs(dx) > Math.abs(dy)) {
         offsetX = -Math.sign(dx) * visualOffset;
     }
 
-    if (hitY.hit) {
+    if (hitY.hit && Math.abs(dy) > Math.abs(dx)) {
         offsetY = -Math.sign(dy) * visualOffset;
     }
 
