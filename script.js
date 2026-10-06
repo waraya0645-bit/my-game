@@ -194,18 +194,18 @@ function update(time, delta) {
     const angle = Math.atan2(dy, dx);
     const moveAmount = this.speed * (delta / 1000);
 
-    // 当たり判定
+    // ================================
+    // サイズ
+    // ================================
+
     const halfSize = 28;
-
-    // 見た目の画像
     const visualHalfSize = 32;
-
-    // 見た目だけ2px外側へ
     const visualOffset = 4;
-    
-    // =================================
-    // 壁にぶつかっているか調べる関数
-    // =================================
+
+
+    // ================================
+    // 壁との衝突判定
+    // ================================
 
     const isColliding = (x, y) => {
 
@@ -225,7 +225,7 @@ function update(time, delta) {
                 const wallLeft = col * 64;
                 const wallRight = wallLeft + 64;
                 const wallTop = row * 64;
-                const wallBottom = wallTop + 64;
+                const wallBottom = row * 64 + 64;
 
                 if (
                     right > wallLeft &&
@@ -250,16 +250,16 @@ function update(time, delta) {
     };
 
 
-    // =================================
-    // X方向
-    // =================================
+    // ================================
+    // X方向へ移動
+    // ================================
 
     const nextX =
         this.playerBody.x +
         Math.cos(angle) * moveAmount;
 
-    const hitX = isColliding(nextX, this.playerBody.y);
-
+    const hitX =
+        isColliding(nextX, this.playerBody.y);
 
     if (!hitX.hit) {
 
@@ -269,29 +269,27 @@ function update(time, delta) {
 
         if (dx > 0) {
 
-            // 右の壁
             this.playerBody.x =
                 hitX.left - halfSize;
 
         } else if (dx < 0) {
 
-            // 左の壁
             this.playerBody.x =
                 hitX.right + halfSize;
         }
     }
 
 
-    // =================================
-    // Y方向
-    // =================================
+    // ================================
+    // Y方向へ移動
+    // ================================
 
     const nextY =
         this.playerBody.y +
         Math.sin(angle) * moveAmount;
 
-    const hitY = isColliding(this.playerBody.x, nextY);
-
+    const hitY =
+        isColliding(this.playerBody.x, nextY);
 
     if (!hitY.hit) {
 
@@ -301,169 +299,189 @@ function update(time, delta) {
 
         if (dy > 0) {
 
-            // 下の壁
             this.playerBody.y =
                 hitY.top - halfSize;
 
         } else if (dy < 0) {
 
-            // 上の壁
             this.playerBody.y =
                 hitY.bottom + halfSize;
         }
     }
-    
-    // =================================
-    // 1タイル幅の道への軽い吸着
-    // =================================
 
-    const centerX =
 
-        Math.floor(this.playerBody.x / 64) * 64 + 32;
+    // ================================
+    // 1タイル幅の道への吸着
+    // ================================
 
-    const centerY =
-
-        Math.floor(this.playerBody.y / 64) * 64 + 32;
-
-    // 上下が壁で挟まれている場合
     const tileX =
         Math.floor(this.playerBody.x / 64);
 
     const tileY =
         Math.floor(this.playerBody.y / 64);
 
-    const currentRow = this.mapData[tileY];
+    const currentRow =
+        this.mapData[tileY];
 
-if (currentRow) {
+    if (currentRow) {
 
         const upperWall =
-    
             this.mapData[tileY - 1]?.[tileX] === 1;
 
-
         const lowerWall =
-    
             this.mapData[tileY + 1]?.[tileX] === 1;
 
+        const centerY =
+            tileY * 64 + 32;
 
-        if (false) {
+        // 上下が壁で挟まれた1タイル幅の道
+        if (
+            upperWall &&
+            lowerWall &&
+            !hitY.hit
+        ) {
 
             this.playerBody.y +=
                 (centerY - this.playerBody.y) * 1;
         }
     }
 
-// =================================
-// 見た目の画像
-// =================================
 
-let offsetX = 0;
-let offsetY = 0;
+    // ================================
+    // 見た目の画像
+    // ================================
 
-// 最大でも4pxまでにする
-for (let row = 0; row < this.mapData.length; row++) {
+    let offsetX = 0;
+    let offsetY = 0;
 
-    for (let col = 0; col < this.mapData[row].length; col++) {
+    const bodyLeft =
+        this.playerBody.x - halfSize;
 
-        if (this.mapData[row][col] !== 1) {
-            continue;
-        }
+    const bodyRight =
+        this.playerBody.x + halfSize;
 
-        const wallLeft = col * 64;
-        const wallRight = wallLeft + 64;
-        const wallTop = row * 64;
-        const wallBottom = row * 64 + 64;
+    const bodyTop =
+        this.playerBody.y - halfSize;
 
-        const visualLeft =
-            this.playerBody.x - visualHalfSize;
-
-        const visualRight =
-            this.playerBody.x + visualHalfSize;
-
-        const visualTop =
-            this.playerBody.y - visualHalfSize;
-
-        const visualBottom =
-            this.playerBody.y + visualHalfSize;
+    const bodyBottom =
+        this.playerBody.y + halfSize;
 
 
-        // 左側の壁
-        if (
-            visualLeft < wallRight &&
-            visualRight > wallRight &&
-            visualBottom > wallTop &&
-            visualTop < wallBottom
-        ) {
+    // --------------------------------
+    // 近くの壁だけ調べる
+    // --------------------------------
 
-            const amount =
-                wallRight - visualLeft;
+    for (let row = 0; row < this.mapData.length; row++) {
 
-            offsetX = Math.min(
-                visualOffset,
-                Math.max(offsetX, amount)
-            );
-        }
+        for (let col = 0; col < this.mapData[row].length; col++) {
 
+            if (this.mapData[row][col] !== 1) {
+                continue;
+            }
 
-        // 右側の壁
-        if (
-            visualRight > wallLeft &&
-            visualLeft < wallLeft &&
-            visualBottom > wallTop &&
-            visualTop < wallBottom
-        ) {
-
-            const amount =
-                visualRight - wallLeft;
-
-            offsetX = Math.max(
-                -visualOffset,
-                Math.min(offsetX, -amount)
-            );
-        }
+            const wallLeft = col * 64;
+            const wallRight = wallLeft + 64;
+            const wallTop = row * 64;
+            const wallBottom = row * 64 + 64;
 
 
-        // 上側の壁
-        if (
-            visualTop < wallBottom &&
-            visualBottom > wallBottom &&
-            visualRight > wallLeft &&
-            visualLeft < wallRight
-        ) {
+            // ============================
+            // 左側の壁
+            // ============================
 
-            const amount =
-                wallBottom - visualTop;
+            const leftGap =
+                wallLeft - bodyRight;
 
-            offsetY = Math.min(
-                visualOffset,
-                Math.max(offsetY, amount)
-            );
-        }
+            if (
+                leftGap >= 0 &&
+                leftGap < visualOffset &&
+                bodyBottom > wallTop &&
+                bodyTop < wallBottom
+            ) {
+
+                offsetX =
+                    Math.min(
+                        offsetX,
+                        -(visualOffset - leftGap)
+                    );
+            }
 
 
-        // 下側の壁
-        if (
-            visualBottom > wallTop &&
-            visualTop < wallTop &&
-            visualRight > wallLeft &&
-            visualLeft < wallRight
-        ) {
+            // ============================
+            // 右側の壁
+            // ============================
 
-            const amount =
-                visualBottom - wallTop;
+            const rightGap =
+                bodyLeft - wallRight;
 
-            offsetY = Math.max(
-                -visualOffset,
-                Math.min(offsetY, -amount)
-            );
+            if (
+                rightGap >= 0 &&
+                rightGap < visualOffset &&
+                bodyBottom > wallTop &&
+                bodyTop < wallBottom
+            ) {
+
+                offsetX =
+                    Math.max(
+                        offsetX,
+                        visualOffset - rightGap
+                    );
+            }
+
+
+            // ============================
+            // 上側の壁
+            // ============================
+
+            const topGap =
+                wallTop - bodyBottom;
+
+            if (
+                topGap >= 0 &&
+                topGap < visualOffset &&
+                bodyRight > wallLeft &&
+                bodyLeft < wallRight
+            ) {
+
+                offsetY =
+                    Math.min(
+                        offsetY,
+                        -(visualOffset - topGap)
+                    );
+            }
+
+
+            // ============================
+            // 下側の壁
+            // ============================
+
+            const bottomGap =
+                bodyTop - wallBottom;
+
+            if (
+                bottomGap >= 0 &&
+                bottomGap < visualOffset &&
+                bodyRight > wallLeft &&
+                bodyLeft < wallRight
+            ) {
+
+                offsetY =
+                    Math.max(
+                        offsetY,
+                        visualOffset - bottomGap
+                    );
+            }
         }
     }
-}
 
 
-this.player.x =
-    this.playerBody.x + offsetX;
+    // ================================
+    // プレイヤー画像を表示
+    // ================================
 
-this.player.y =
-    this.playerBody.y + offsetY;
+    this.player.x =
+        this.playerBody.x + offsetX;
+
+    this.player.y =
+        this.playerBody.y + offsetY;
 }
