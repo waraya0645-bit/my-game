@@ -375,4 +375,3 @@ function update(time, delta) {
     this.player.y =
         this.playerBody.y + offsetY;
 }
-}
