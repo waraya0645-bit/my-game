@@ -26,6 +26,8 @@ function preload() {
     this.load.image('player', './images/IMG_0410.png');
     this.load.image('whiteCircle', './images/white_circle.png');
     this.load.image('blackCircle', './images/black_circle.png');
+    this.load.image('floor', './images/floor.png');
+    this.load.image('wall', './images/wall.png');
 }
 
 function create() {
