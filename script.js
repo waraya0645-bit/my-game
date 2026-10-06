@@ -31,7 +31,7 @@ function preload() {
 }
 
 function create() {
-    this mapData = [
+    this.mapData = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -190,26 +190,8 @@ function update(time, delta) {
 
     // 毎秒一定の速度
     const moveAmount = this.speed * (delta / 1000);
-    
-    this.player.x += Math.cos(angle) * moveAmount;
-    this.player.y += Math.sin(angle) * moveAmount;
 
-    // 画面端から出ないようにする
-    const halfWidth = this.player.displayWidth / 2;
-    const halfHeight = this.player.displayHeight / 2;
-    
-    this.player.x = Phaser.Math.Clamp(
-        this.player.x,
-        halfWidth,
-        this.scale.width - halfWidth
-    );
-    
-    this.player.y = Phaser.Math.Clamp(
-        this.player.y,
-        halfHeight,
-        this.scale.height - halfHeight
-    );
-    // 移動先
+    // 移動先の座標
     const nextX = this.player.x + Math.cos(angle) * moveAmount;
     const nextY = this.player.y + Math.sin(angle) * moveAmount;
 
@@ -224,5 +206,4 @@ function update(time, delta) {
         this.player.x = nextX;
         this.player.y = nextY;
     }
-    const currentTile = this.mapData[tileY][tileX];
 }
