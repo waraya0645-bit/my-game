@@ -4,7 +4,7 @@ const config = {
     width: 1152,
     height: 648,
     parent: 'game',
-    backgroundColor: '#c0c0c0',
+    backgroundColor: '#000000',
 
     pixelArt: true,
 
@@ -31,6 +31,8 @@ function preload() {
 }
 
 function create() {
+    const mapOffsetY = 4;
+    this.mapOffsetY = mapOffsetY;
     this.mapData = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,1,0,1,0,0,1,1,1,1,1],
@@ -51,21 +53,21 @@ function create() {
             if (this.mapData[y][x] === 0) {
                 this.add.image(
                     x * tileSize + tileSize / 2,
-                    y * tileSize + tileSize / 2,
+                    y * tileSize + tileSize / 2, + this.mapOffsetY,
                     'floor'
                 );
             }
             if (this.mapData[y][x] === 1) {
                 this.add.image(
                     x * tileSize + tileSize / 2,
-                    y * tileSize + tileSize / 2,
+                    y * tileSize + tileSize / 2, + this.mapOffsetY,
                     'wall'
                 );
             }
         }
     }
     
-    const player = this.add.image(288, 288, 'player');
+    const player = this.add.image(288, 292, 'player');
 
     this.player = player;
 
@@ -73,7 +75,7 @@ function create() {
     
     this.playerBody = {
         x: 288,
-        y: 288
+        y: 292
     };
 
     // =========================
@@ -227,7 +229,7 @@ function update(time, delta) {
 
                 const wallLeft = col * 64;
                 const wallRight = wallLeft + 64;
-                const wallTop = row * 64;
+                const wallTop = row * 64 + this.mapOffsetY;
                 const wallBottom = row * 64 + 64;
 
                 if (
@@ -321,7 +323,9 @@ function update(time, delta) {
         Math.floor(this.playerBody.x / 64);
 
     const tileY =
-        Math.floor(this.playerBody.y / 64);
+    Math.floor(
+        (this.playerBody.y - this.mapOffsetY) / 64
+    );
 
     const currentRow =
         this.mapData[tileY];
@@ -335,7 +339,7 @@ function update(time, delta) {
             this.mapData[tileY + 1]?.[tileX] === 1;
 
         const centerY =
-            tileY * 64 + 32;
+            tileY * 64 + 32 + this.mapOffsetY;
 
         // 上下が壁で挟まれた1タイル幅の道
         if (
