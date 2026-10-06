@@ -354,23 +354,125 @@ if (currentRow) {
     }
 
     // =================================
-    // 見た目の画像
-    // =================================
+// 見た目の画像
+// =================================
 
-    let offsetX = 0;
-    let offsetY = 0;
+let offsetX = 0;
+let offsetY = 0;
 
-    if (hitX.hit) {
-        offsetX = -Math.sign(dx) * visualOffset;
+// 近くの壁によって、見た目の画像が壁に入り込まないようにする
+for (let row = 0; row < this.mapData.length; row++) {
+
+    for (let col = 0; col < this.mapData[row].length; col++) {
+
+        if (this.mapData[row][col] !== 1) {
+            continue;
+        }
+
+        const wallLeft = col * 64;
+        const wallRight = wallLeft + 64;
+        const wallTop = row * 64;
+        const wallBottom = wallTop + 64;
+
+        // プレイヤーの見た目の範囲
+        const visualLeft =
+            this.playerBody.x - visualHalfSize;
+
+        const visualRight =
+            this.playerBody.x + visualHalfSize;
+
+        const visualTop =
+            this.playerBody.y - visualHalfSize;
+
+        const visualBottom =
+            this.playerBody.y + visualHalfSize;
+
+
+        // -------------------------
+        // 左側の壁
+        // -------------------------
+
+        if (
+            visualLeft < wallRight &&
+            visualRight > wallRight &&
+            visualBottom > wallTop &&
+            visualTop < wallBottom
+        ) {
+
+            const amount =
+                wallRight - visualLeft;
+
+            if (amount <= visualOffset) {
+                offsetX += amount;
+            }
+        }
+
+
+        // -------------------------
+        // 右側の壁
+        // -------------------------
+
+        if (
+            visualRight > wallLeft &&
+            visualLeft < wallLeft &&
+            visualBottom > wallTop &&
+            visualTop < wallBottom
+        ) {
+
+            const amount =
+                visualRight - wallLeft;
+
+            if (amount <= visualOffset) {
+                offsetX -= amount;
+            }
+        }
+
+
+        // -------------------------
+        // 上側の壁
+        // -------------------------
+
+        if (
+            visualTop < wallBottom &&
+            visualBottom > wallBottom &&
+            visualRight > wallLeft &&
+            visualLeft < wallRight
+        ) {
+
+            const amount =
+                wallBottom - visualTop;
+
+            if (amount <= visualOffset) {
+                offsetY += amount;
+            }
+        }
+
+
+        // -------------------------
+        // 下側の壁
+        // -------------------------
+
+        if (
+            visualBottom > wallTop &&
+            visualTop < wallTop &&
+            visualRight > wallLeft &&
+            visualLeft < wallRight
+        ) {
+
+            const amount =
+                visualBottom - wallTop;
+
+            if (amount <= visualOffset) {
+                offsetY -= amount;
+            }
+        }
     }
+}
 
-    if (hitY.hit) {
-        offsetY = -Math.sign(dy) * visualOffset;
-    }
 
-    this.player.x =
-        this.playerBody.x + offsetX;
+this.player.x =
+    this.playerBody.x + offsetX;
 
-    this.player.y =
-        this.playerBody.y + offsetY;
+this.player.y =
+    this.playerBody.y + offsetY;
 }
