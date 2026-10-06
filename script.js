@@ -350,7 +350,7 @@ if (currentRow) {
 
             this.playerBody.y +=
         
-                (centerY - this.playerBody.y) * 0.15;
+                (centerY - this.playerBody.y) * 0.5;
         }
     }
 
