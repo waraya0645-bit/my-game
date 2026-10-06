@@ -195,7 +195,7 @@ function update(time, delta) {
     const nextX = this.player.x + Math.cos(angle) * moveAmount;
     const nextY = this.player.y + Math.sin(angle) * moveAmount;
 // プレイヤーの半分の大きさ
-const halfSize = 20;
+const halfSize = 30;
 
 // X方向だけ移動できるか調べる
 const canMoveX =
