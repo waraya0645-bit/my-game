@@ -194,28 +194,23 @@ function update(time, delta) {
     // 移動先の座標
     const nextX = this.player.x + Math.cos(angle) * moveAmount;
     const nextY = this.player.y + Math.sin(angle) * moveAmount;
+// プレイヤーの半分の大きさ
 const halfSize = 32;
 
-// playerの四隅が入る範囲
-const left   = nextX - halfSize;
-const right  = nextX + halfSize;
-const top    = nextY - halfSize;
-const bottom = nextY + halfSize;
+// プレイヤーの四隅が入るタイルを調べる
+const left   = Math.floor((nextX - halfSize) / 64);
+const right  = Math.floor((nextX + halfSize - 1) / 64);
+const top    = Math.floor((nextY - halfSize) / 64);
+const bottom = Math.floor((nextY + halfSize - 1) / 64);
 
-// 四隅があるタイル
-const leftTile   = Math.floor(left / 64);
-const rightTile  = Math.floor(right / 64);
-const topTile    = Math.floor(top / 64);
-const bottomTile = Math.floor(bottom / 64);
+// 四隅すべてが床なら移動
+const canMove =
+    this.mapData[top]?.[left] === 0 &&
+    this.mapData[top]?.[right] === 0 &&
+    this.mapData[bottom]?.[left] === 0 &&
+    this.mapData[bottom]?.[right] === 0;
 
-// 四隅のどこかが壁なら移動しない
-const blocked =
-    this.mapData[topTile]?.[leftTile] === 1 ||
-    this.mapData[topTile]?.[rightTile] === 1 ||
-    this.mapData[bottomTile]?.[leftTile] === 1 ||
-    this.mapData[bottomTile]?.[rightTile] === 1;
-
-if (!blocked) {
+if (canMove) {
     this.player.x = nextX;
     this.player.y = nextY;
 }
