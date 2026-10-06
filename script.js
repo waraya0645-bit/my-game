@@ -191,66 +191,6 @@ function update(time, delta) {
         return;
     }
 
-// =========================
-// 3方向が壁に囲まれているか
-// =========================
-
-const tileX =
-    Math.floor(this.playerBody.x / 64);
-
-const tileY =
-    Math.floor(this.playerBody.y / 64);
-
-const up =
-    this.mapData[tileY - 1]?.[tileX] === 1;
-
-const down =
-    this.mapData[tileY + 1]?.[tileX] === 1;
-
-const left =
-    this.mapData[tileY]?.[tileX - 1] === 1;
-
-const right =
-    this.mapData[tileY]?.[tileX + 1] === 1;
-
-const wallCount =
-    Number(up) +
-    Number(down) +
-    Number(left) +
-    Number(right);
-
-const tileCenterX = tileX * 64 + 32;
-const tileCenterY = tileY * 64 + 32;
-
-const nearCenter =
-    Math.abs(this.playerBody.x - tileCenterX) < 8 &&
-    Math.abs(this.playerBody.y - tileCenterY) < 8;
-
-
-// 3方向が壁なら、開いている方向だけに動かす
-if (wallCount === 3 && nearCenter) {
-
-    if (!up) {
-        dx = 0;
-        dy = -Math.abs(dy);
-    }
-
-    if (!down) {
-        dx = 0;
-        dy = Math.abs(dy);
-    }
-
-    if (!left) {
-        dx = -Math.abs(dx);
-        dy = 0;
-    }
-
-    if (!right) {
-        dx = Math.abs(dx);
-        dy = 0;
-    }
-}
-    
     const angle = Math.atan2(dy, dx);
     const moveAmount = this.speed * (delta / 1000);
 
