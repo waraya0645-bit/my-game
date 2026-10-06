@@ -1,8 +1,8 @@
 // Deploy Preview test
 const config = {
     type: Phaser.AUTO,
-    width: 960,
-    height: 576,
+    width: 1280,
+    height: 720,
     parent: 'game',
     backgroundColor: '#c0c0c0',
 
