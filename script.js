@@ -197,29 +197,34 @@ function update(time, delta) {
 // プレイヤーの半分の大きさ
 const halfSize = 32;
 
-// 壁にめり込んでいるか調べる関数
-const isWall = (x, y) => {
+// X方向だけ移動できるか調べる
+const canMoveX =
+    this.mapData[Math.floor((this.player.y - halfSize) / 64)]?.[Math.floor((nextX - halfSize) / 64)] === 0 &&
+    this.mapData[Math.floor((this.player.y - halfSize) / 64)]?.[Math.floor((nextX + halfSize - 1) / 64)] === 0 &&
+    this.mapData[Math.floor((this.player.y + halfSize - 1) / 64)]?.[Math.floor((nextX - halfSize) / 64)] === 0 &&
+    this.mapData[Math.floor((this.player.y + halfSize - 1) / 64)]?.[Math.floor((nextX + halfSize - 1) / 64)] === 0;
 
-    const left = Math.floor((x - halfSize) / 64);
-    const right = Math.floor((x + halfSize - 1) / 64);
-    const top = Math.floor((y - halfSize) / 64);
-    const bottom = Math.floor((y + halfSize - 1) / 64);
+// Y方向だけ移動できるか調べる
+const canMoveY =
+    this.mapData[Math.floor((nextY - halfSize) / 64)]?.[Math.floor((this.player.x - halfSize) / 64)] === 0 &&
+    this.mapData[Math.floor((nextY - halfSize) / 64)]?.[Math.floor((this.player.x + halfSize - 1) / 64)] === 0 &&
+    this.mapData[Math.floor((nextY + halfSize - 1) / 64)]?.[Math.floor((this.player.x - halfSize) / 64)] === 0 &&
+    this.mapData[Math.floor((nextY + halfSize - 1) / 64)]?.[Math.floor((this.player.x + halfSize - 1) / 64)] === 0;
 
-    return (
-        this.mapData[top]?.[left] === 1 ||
-        this.mapData[top]?.[right] === 1 ||
-        this.mapData[bottom]?.[left] === 1 ||
-        this.mapData[bottom]?.[right] === 1
-    );
-};
-
-// X方向の移動
-if (!isWall(nextX, this.player.y)) {
+// X方向だけ通れるならX方向へ
+if (canMoveX) {
     this.player.x = nextX;
+} else {
+    // X方向で壁にぶつかった場合、壁ギリギリまで寄せる
+    if (nextX > this.player.x) {
+        this.player.x = Math.floor(nextX / 64) * 64 - halfSize;
+    } else {
+        this.player.x = Math.floor(nextX / 64 + 1) * 64 + halfSize;
+    }
 }
 
-// Y方向の移動
-if (!isWall(this.player.x, nextY)) {
+// Y方向だけ通れるならY方向へ
+if (canMoveY) {
     this.player.y = nextY;
 }
 }
