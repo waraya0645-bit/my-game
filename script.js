@@ -27,7 +27,7 @@ function preload() {
     this.load.image('whiteCircle', './images/white_circle.png');
     this.load.image('blackCircle', './images/black_circle.png');
     this.load.image('floor', './images/floor.png');
-    this.load.image('wall', './images/wall.png');
+    this.load.image('wall', './images/wall1.png');
 }
 
 function create() {
