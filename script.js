@@ -182,10 +182,6 @@ function update(time, delta) {
         return;
     }
 
-    // =========================
-    // スティックの方向
-    // =========================
-
     const dx = this.blackCircle.x - this.stickX;
     const dy = this.blackCircle.y - this.stickY;
 
@@ -196,194 +192,143 @@ function update(time, delta) {
     }
 
     const angle = Math.atan2(dy, dx);
-
     const moveAmount = this.speed * (delta / 1000);
 
+    // 当たり判定
+    const halfSize = 30;
 
-    // =========================
-    // サイズ
-    // =========================
+    // 見た目の画像
+    const visualHalfSize = 32;
 
-    const halfSize = 30;       // 当たり判定 60×60
-    const visualHalfSize = 32; // 画像 64×64
-
-    const visualOffset = visualHalfSize - halfSize;
-    // 32 - 30 = 2px
+    // 見た目だけ2px外側へ
+    const visualOffset = 2;
 
 
-    // =========================
-    // 次に移動する座標
-    // =========================
+    // =================================
+    // 壁にぶつかっているか調べる関数
+    // =================================
+
+    const isColliding = (x, y) => {
+
+        const left = x - halfSize;
+        const right = x + halfSize;
+        const top = y - halfSize;
+        const bottom = y + halfSize;
+
+        for (let row = 0; row < this.mapData.length; row++) {
+
+            for (let col = 0; col < this.mapData[row].length; col++) {
+
+                if (this.mapData[row][col] !== 1) {
+                    continue;
+                }
+
+                const wallLeft = col * 64;
+                const wallRight = wallLeft + 64;
+                const wallTop = row * 64;
+                const wallBottom = wallTop + 64;
+
+                if (
+                    right > wallLeft &&
+                    left < wallRight &&
+                    bottom > wallTop &&
+                    top < wallBottom
+                ) {
+                    return {
+                        hit: true,
+                        left: wallLeft,
+                        right: wallRight,
+                        top: wallTop,
+                        bottom: wallBottom
+                    };
+                }
+            }
+        }
+
+        return {
+            hit: false
+        };
+    };
+
+
+    // =================================
+    // X方向
+    // =================================
 
     const nextX =
         this.playerBody.x +
         Math.cos(angle) * moveAmount;
 
-    const nextY =
-        this.playerBody.y +
-        Math.sin(angle) * moveAmount;
+    const hitX = isColliding(nextX, this.playerBody.y);
 
 
-    // =========================
-    // X方向の衝突判定
-    // =========================
-
-    const bodyYTop =
-        Math.floor(
-            (this.playerBody.y - halfSize) / 64
-        );
-
-    const bodyYBottom =
-        Math.floor(
-            (this.playerBody.y + halfSize - 1) / 64
-        );
-
-    const nextXLeft =
-        Math.floor(
-            (nextX - halfSize) / 64
-        );
-
-    const nextXRight =
-        Math.floor(
-            (nextX + halfSize - 1) / 64
-        );
-
-    const canMoveX =
-        this.mapData[bodyYTop]?.[nextXLeft] === 0 &&
-        this.mapData[bodyYTop]?.[nextXRight] === 0 &&
-        this.mapData[bodyYBottom]?.[nextXLeft] === 0 &&
-        this.mapData[bodyYBottom]?.[nextXRight] === 0;
-
-
-    // =========================
-    // Y方向の衝突判定
-    // =========================
-
-    const bodyXLeft =
-        Math.floor(
-            (this.playerBody.x - halfSize) / 64
-        );
-
-    const bodyXRight =
-        Math.floor(
-            (this.playerBody.x + halfSize - 1) / 64
-        );
-
-    const nextYTop =
-        Math.floor(
-            (nextY - halfSize) / 64
-        );
-
-    const nextYBottom =
-        Math.floor(
-            (nextY + halfSize - 1) / 64
-        );
-
-    const canMoveY =
-        this.mapData[nextYTop]?.[bodyXLeft] === 0 &&
-        this.mapData[nextYTop]?.[bodyXRight] === 0 &&
-        this.mapData[nextYBottom]?.[bodyXLeft] === 0 &&
-        this.mapData[nextYBottom]?.[bodyXRight] === 0;
-
-
-    // =========================
-    // X方向を移動
-    // =========================
-
-    let hitX = false;
-
-    if (canMoveX) {
+    if (!hitX.hit) {
 
         this.playerBody.x = nextX;
 
     } else {
 
-        hitX = true;
-
         if (dx > 0) {
 
             // 右の壁
-            const wallX =
-                Math.floor(
-                    (nextX + halfSize) / 64
-                );
-
             this.playerBody.x =
-                wallX * 64 - halfSize;
+                hitX.left - halfSize;
 
-        } else {
+        } else if (dx < 0) {
 
             // 左の壁
-            const wallX =
-                Math.floor(
-                    (nextX - halfSize) / 64
-                );
-
             this.playerBody.x =
-                (wallX + 1) * 64 + halfSize;
+                hitX.right + halfSize;
         }
     }
 
 
-    // =========================
-    // Y方向を移動
-    // =========================
+    // =================================
+    // Y方向
+    // =================================
 
-    let hitY = false;
+    const nextY =
+        this.playerBody.y +
+        Math.sin(angle) * moveAmount;
 
-    if (canMoveY) {
+    const hitY = isColliding(this.playerBody.x, nextY);
+
+
+    if (!hitY.hit) {
 
         this.playerBody.y = nextY;
 
     } else {
 
-        hitY = true;
-
         if (dy > 0) {
 
             // 下の壁
-            const wallY =
-                Math.floor(
-                    (nextY + halfSize) / 64
-                );
-
             this.playerBody.y =
-                wallY * 64 - halfSize;
+                hitY.top - halfSize;
 
-        } else {
+        } else if (dy < 0) {
 
             // 上の壁
-            const wallY =
-                Math.floor(
-                    (nextY - halfSize) / 64
-                );
-
             this.playerBody.y =
-                (wallY + 1) * 64 + halfSize;
+                hitY.bottom + halfSize;
         }
     }
 
 
-    // =========================
-    // 見た目の画像をずらす
-    // =========================
+    // =================================
+    // 見た目の画像
+    // =================================
 
     let offsetX = 0;
     let offsetY = 0;
 
-
-    if (hitX) {
+    if (hitX.hit) {
         offsetX = -Math.sign(dx) * visualOffset;
     }
 
-    if (hitY) {
+    if (hitY.hit) {
         offsetY = -Math.sign(dy) * visualOffset;
     }
-
-
-    // =========================
-    // 画像を表示
-    // =========================
 
     this.player.x =
         this.playerBody.x + offsetX;
