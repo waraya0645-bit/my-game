@@ -219,8 +219,16 @@ const wallCount =
     Number(left) +
     Number(right);
 
+const tileCenterX = tileX * 64 + 32;
+const tileCenterY = tileY * 64 + 32;
+
+const nearCenter =
+    Math.abs(this.playerBody.x - tileCenterX) < 8 &&
+    Math.abs(this.playerBody.y - tileCenterY) < 8;
+
+
 // 3方向が壁なら、開いている方向だけに動かす
-if (wallCount === 3) {
+if (wallCount === 3 && nearCenter) {
 
     if (!up) {
         dx = 0;
