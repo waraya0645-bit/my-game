@@ -194,16 +194,29 @@ function update(time, delta) {
     // 移動先の座標
     const nextX = this.player.x + Math.cos(angle) * moveAmount;
     const nextY = this.player.y + Math.sin(angle) * moveAmount;
+const halfSize = 32;
 
-    // 移動先のタイル
-    const nextTileX = Math.floor(nextX / 64);
-    const nextTileY = Math.floor(nextY / 64);
+// playerの四隅が入る範囲
+const left   = nextX - halfSize;
+const right  = nextX + halfSize;
+const top    = nextY - halfSize;
+const bottom = nextY + halfSize;
 
-    const nextTile = this.mapData[nextTileY][nextTileX];
+// 四隅があるタイル
+const leftTile   = Math.floor(left / 64);
+const rightTile  = Math.floor(right / 64);
+const topTile    = Math.floor(top / 64);
+const bottomTile = Math.floor(bottom / 64);
 
-    // 壁でなければ移動
-    if (nextTile === 0) {
-        this.player.x = nextX;
-        this.player.y = nextY;
-    }
+// 四隅のどこかが壁なら移動しない
+const blocked =
+    this.mapData[topTile]?.[leftTile] === 1 ||
+    this.mapData[topTile]?.[rightTile] === 1 ||
+    this.mapData[bottomTile]?.[leftTile] === 1 ||
+    this.mapData[bottomTile]?.[rightTile] === 1;
+
+if (!blocked) {
+    this.player.x = nextX;
+    this.player.y = nextY;
+}
 }
