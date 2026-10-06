@@ -346,11 +346,10 @@ if (currentRow) {
             this.mapData[tileY + 1]?.[tileX] === 1;
 
 
-        if (upperWall && lowerWall && !hitY.hit) {
+        if (false) {
 
             this.playerBody.y +=
-        
-                (centerY - this.playerBody.y) * 0.5;
+                (centerY - this.playerBody.y) * 0.15;
         }
     }
 
@@ -361,11 +360,11 @@ if (currentRow) {
     let offsetX = 0;
     let offsetY = 0;
 
-    if (hitX.hit && Math.abs(dx) > Math.abs(dy)) {
+    if (hitX.hit) {
         offsetX = -Math.sign(dx) * visualOffset;
     }
 
-    if (hitY.hit && Math.abs(dy) > Math.abs(dx)) {
+    if (hitY.hit) {
         offsetY = -Math.sign(dy) * visualOffset;
     }
 
