@@ -231,6 +231,7 @@ function update(time, delta) {
     }
 
     const angle = Math.atan2(dy, dx);
+    const actualFps = this.game.loop.actualFps;
     const moveAmount = this.speed * (delta / 1000);
 
     // ================================
