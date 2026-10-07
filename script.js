@@ -31,6 +31,31 @@ function preload() {
 }
 
 function create() {
+this.startText = this.add.text(
+    this.scale.width / 2,
+    this.scale.height / 2,
+    'START',
+    {
+        fontSize: '48px',
+        color: '#ffffff',
+        backgroundColor: '#333333',
+        padding: {
+            x: 30,
+            y: 15
+        }
+    }
+);
+
+this.startText.setOrigin(0.5);
+this.startText.setInteractive({ useHandCursor: true });
+
+this.startText.on('pointerdown', () => {
+    this.gameStarted = true;
+    this.startText.destroy();
+});
+    // ゲーム開始前
+    this.gameStarted = false;
+    
     const mapOffsetY = 4;
     this.mapOffsetY = mapOffsetY;
     this.mapData = [
