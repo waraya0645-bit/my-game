@@ -204,6 +204,9 @@ this.startText.setInteractive({ useHandCursor: true });
 }
 
 function update(time, delta) {
+    if (!this.gameStarted) {
+        return;
+    }
 
     if (!this.isDragging) {
         return;
