@@ -178,6 +178,11 @@ function create() {
         this.blackCircle.x = this.stickX;
         this.blackCircle.y = this.stickY;
     });
+
+    this.debugText = this.add.text(10, 10, 'delta: --', {
+        fontSize: '20px',
+        color: '#ffffff'
+    });
 }
 
 function update(time, delta) {
@@ -187,6 +192,8 @@ function update(time, delta) {
     }
 
     console.log("delta:", delta);
+
+    this.debugText.setText('delta: ' + delta.toFixed(2));
 
     let dx = this.blackCircle.x - this.stickX;
     let dy = this.blackCircle.y - this.stickY;
