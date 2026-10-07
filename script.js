@@ -196,7 +196,8 @@ function update(time, delta) {
     }
 
     const angle = Math.atan2(dy, dx);
-    const moveAmount = 5;
+    const safeDelta = Math.min(delta, 16.67);
+    const moveAmount = this.speed * (safeDelta / 1000);
 
     // ================================
     // サイズ
