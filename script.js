@@ -186,6 +186,8 @@ function update(time, delta) {
         return;
     }
 
+    console.log("delta:", delta);
+
     let dx = this.blackCircle.x - this.stickX;
     let dy = this.blackCircle.y - this.stickY;
 
@@ -196,8 +198,7 @@ function update(time, delta) {
     }
 
     const angle = Math.atan2(dy, dx);
-    const safeDelta = Math.min(delta, 16.67);
-    const moveAmount = this.speed * (safeDelta / 1000);
+    const moveAmount = this.speed * (delta / 1000);
 
     // ================================
     // サイズ
