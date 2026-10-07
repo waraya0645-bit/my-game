@@ -229,7 +229,7 @@ function update(time, delta) {
                 const wallLeft = col * 64;
                 const wallRight = wallLeft + 64;
                 const wallTop = row * 64 + this.mapOffsetY;
-                const wallBottom = row * 64 + 64;
+                const wallBottom = row * 64 + 64 + this.mapOffsetY;
 
                 if (
                     right > wallLeft &&
@@ -387,8 +387,8 @@ function update(time, delta) {
 
             const wallLeft = col * 64;
             const wallRight = wallLeft + 64;
-            const wallTop = row * 64;
-            const wallBottom = row * 64 + 64;
+            const wallTop = row * 64 + this.mapOffsetY;
+            const wallBottom = row * 64 + 64 + this.mapOffsetY;
 
 
             // ============================
