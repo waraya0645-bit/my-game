@@ -200,7 +200,12 @@ function create() {
 );
 
 this.startText.setOrigin(0.5);
-this.startText.setInteractive({ useHandCursor: true });
+this.startText.setInteractive();
+
+this.startText.on('pointerdown', () => {
+    this.gameStarted = true;
+    this.startText.destroy();
+});
 }
 
 function update(time, delta) {
