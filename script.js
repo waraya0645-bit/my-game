@@ -36,7 +36,7 @@ function preload() {
 function create() {
     const mapOffsetY = 4;
     this.mapOffsetY = mapOffsetY;
-    this.wallTiles = [1, 2];
+    this.wallTiles = [1, 2, 00];
     // オブジェクトの配置
     this.objects = [
         {tileX: 4,tileY: 5,image: '00'},
