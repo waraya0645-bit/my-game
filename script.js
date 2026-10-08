@@ -26,14 +26,15 @@ function preload() {
     this.load.image('player', './images/IMG_0410.png');
     this.load.image('whiteCircle', './images/white_circle.png');
     this.load.image('blackCircle', './images/black_circle.png');
-    this.load.image('floor', './images/floor.png');
-    this.load.image('wall', './images/wall1.png');
-    this.load.image('black', './images/black.png');
+    this.load.image('0', './images/floor.png');
+    this.load.image('1', './images/wall1.png');
+    this.load.image('2', './images/black.png');
 }
 
 function create() {
     const mapOffsetY = 4;
     this.mapOffsetY = mapOffsetY;
+    this.wallTiles = [1, 2];
     this.mapData = [
     [2,1,1,1,1,1,1,1,1,2,1,2,1,1,2,2,2,2],
     [2,0,0,0,0,0,0,0,0,1,0,1,0,0,2,2,2,2],
@@ -50,27 +51,11 @@ function create() {
     for (let y = 0; y < this.mapData.length; y++) {
         for (let x = 0; x < this.mapData[y].length; x++) {
 
-            if (this.mapData[y][x] === 0) {
-                this.add.image(
-                    x * tileSize + tileSize / 2,
-                    y * tileSize + tileSize / 2 + this.mapOffsetY,
-                    'floor'
-                );
-            }
-            if (this.mapData[y][x] === 1) {
-                this.add.image(
-                    x * tileSize + tileSize / 2,
-                    y * tileSize + tileSize / 2 + this.mapOffsetY,
-                    'wall'
-                );
-            }
-            if (this.mapData[y][x] === 2) {
-                this.add.image(
-                    x * tileSize + tileSize / 2,
-                    y * tileSize + tileSize / 2 + this.mapOffsetY,
-                    'black'
-                );
-            }
+            this.add.image(
+                x * tileSize + tileSize / 2,
+                y * tileSize + tileSize / 2 + this.mapOffsetY,
+                String(this.mapData[y][x])
+            );
         }
     }
     
@@ -265,10 +250,7 @@ function update(time, delta) {
 
             for (let col = 0; col < this.mapData[row].length; col++) {
 
-                if (
-                    this.mapData[row][col] !== 1 &&
-                    this.mapData[row][col] !== 2
-                ) {
+                if (!this.wallTiles.includes(this.mapData[row][col])) {
                     continue;
                 }
 
@@ -427,7 +409,7 @@ function update(time, delta) {
 
         for (let col = 0; col < this.mapData[row].length; col++) {
 
-            if (this.mapData[row][col] !== 1) {
+            if (!this.wallTiles.includes(this.mapData[row][col])) {
                 continue;
             }
 
