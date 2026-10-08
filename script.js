@@ -30,17 +30,17 @@ function preload() {
     this.load.image('1', './images/wall1.png');
     this.load.image('2', './images/black.png');
 
-    this.load.image('3', './images/dot-Mygame_20261009081021.png');
+    this.load.image('00', './images/dot-Mygame_20261009081021.png');
 }
 
 function create() {
     const mapOffsetY = 4;
     this.mapOffsetY = mapOffsetY;
-    this.wallTiles = [1, 2, 3];
+    this.wallTiles = [1, 2,];
     // オブジェクトの配置
-    //this.objects = [
-        //{tileX: 4,tileY: 5,image: '00'},
-    //];
+    this.objects = [
+        {tileX: 4,tileY: 5,image: '00'},
+    ];
     this.mapData = [
     [2,1,1,1,1,2,2,2,1,1,1,1,1,1,2,2,2,2],
     [2,1,1,1,1,2,2,2,1,1,1,1,1,1,2,2,2,2],
@@ -50,7 +50,7 @@ function create() {
     [2,0,0,0,0,2,2,2,2,2,0,2,2,2,2,2,2,2],
     [2,0,0,0,0,1,1,1,1,1,0,1,1,1,1,1,2,2],
     [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,2,2],
+    [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
     ];
     const tileSize = 64;
@@ -65,13 +65,13 @@ function create() {
         }
     }
 
-    //for (const obj of this.objects) {
-        //this.add.image(
-            //obj.tileX * 64 + 32,
-            //obj.tileY * 64 + 32 + this.mapOffsetY,
-            //obj.image
-        //);
-    //}
+    for (const obj of this.objects) {
+        this.add.image(
+            obj.tileX * 64 + 32,
+            obj.tileY * 64 + 32 + this.mapOffsetY,
+            obj.image
+        );
+    }
     
     const player = this.add.image(288, 292, 'player');
 
