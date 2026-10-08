@@ -29,12 +29,18 @@ function preload() {
     this.load.image('0', './images/floor.png');
     this.load.image('1', './images/wall1.png');
     this.load.image('2', './images/black.png');
+
+    this.load.image('00', './images/dot-Mygame_20261009081021.png');
 }
 
 function create() {
     const mapOffsetY = 4;
     this.mapOffsetY = mapOffsetY;
     this.wallTiles = [1, 2];
+    // オブジェクトの配置
+    this.objects = [
+        {x: 200,y: 300,image: '00'},
+    ];
     this.mapData = [
     [2,1,1,1,1,2,2,2,1,1,1,1,1,1,2,2,2,2],
     [2,1,1,1,1,2,2,2,1,1,1,1,1,1,2,2,2,2],
@@ -57,6 +63,14 @@ function create() {
                 String(this.mapData[y][x])
             );
         }
+    }
+
+    for (const obj of this.objects) {
+        this.add.image(
+            obj.x,
+            obj.y,
+            obj.image
+        );
     }
     
     const player = this.add.image(288, 292, 'player');
