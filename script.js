@@ -39,7 +39,7 @@ function create() {
     this.wallTiles = [1, 2];
     // オブジェクトの配置
     this.objects = [
-        {x: 200,y: 300,image: '00'},
+        {tileX: 4,tileY: 5,image: '00'},
     ];
     this.mapData = [
     [2,1,1,1,1,2,2,2,1,1,1,1,1,1,2,2,2,2],
@@ -67,8 +67,8 @@ function create() {
 
     for (const obj of this.objects) {
         this.add.image(
-            obj.x,
-            obj.y,
+            obj.tileX * 64 + 32,
+            obj.tileY * 64 + 32 + this.mapOffsetY,
             obj.image
         );
     }
