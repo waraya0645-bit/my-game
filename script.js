@@ -28,6 +28,7 @@ function preload() {
     this.load.image('blackCircle', './images/black_circle.png');
     this.load.image('floor', './images/floor.png');
     this.load.image('wall', './images/wall1.png');
+    this.load.image('black', './images/無題219_20261006225322.png')
 }
 
 function create() {
@@ -43,7 +44,7 @@ function create() {
     [1,0,0,0,0,0,0,0,0,1,0,1,0,0,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    [2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1]
     ];
     const tileSize = 64;
     for (let y = 0; y < this.mapData.length; y++) {
@@ -61,6 +62,13 @@ function create() {
                     x * tileSize + tileSize / 2,
                     y * tileSize + tileSize / 2 + this.mapOffsetY,
                     'wall'
+                );
+            }
+            if (this.mapData[y][x] === 2) {
+                this.add.image(
+                    x * tileSize + tileSize / 2,
+                    y * tileSize + tileSize / 2 + this.mapOffsetY,
+                    'black'
                 );
             }
         }
