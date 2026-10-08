@@ -36,10 +36,10 @@ function preload() {
 function create() {
     const mapOffsetY = 4;
     this.mapOffsetY = mapOffsetY;
-    this.wallTiles = [1, 2, 00];
+    this.wallTiles = [1, 2,];
     // オブジェクトの配置
-    this.objects = [
-        {tileX: 4,tileY: 5,image: '00'},
+    //this.objects = [
+        //{tileX: 4,tileY: 5,image: '00'},
     ];
     this.mapData = [
     [2,1,1,1,1,2,2,2,1,1,1,1,1,1,2,2,2,2],
@@ -50,7 +50,7 @@ function create() {
     [2,0,0,0,0,2,2,2,2,2,0,2,2,2,2,2,2,2],
     [2,0,0,0,0,1,1,1,1,1,0,1,1,1,1,1,2,2],
     [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
-    [2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2],
+    [2,0,0,0,0,0,0,0,0,00,0,0,0,0,0,0,2,2],
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
     ];
     const tileSize = 64;
@@ -65,13 +65,13 @@ function create() {
         }
     }
 
-    for (const obj of this.objects) {
-        this.add.image(
-            obj.tileX * 64 + 32,
-            obj.tileY * 64 + 32 + this.mapOffsetY,
-            obj.image
-        );
-    }
+    //for (const obj of this.objects) {
+        //this.add.image(
+            //obj.tileX * 64 + 32,
+            //obj.tileY * 64 + 32 + this.mapOffsetY,
+            //obj.image
+        //);
+    //}
     
     const player = this.add.image(288, 292, 'player');
 
