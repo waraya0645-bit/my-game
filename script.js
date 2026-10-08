@@ -28,7 +28,7 @@ function preload() {
     this.load.image('blackCircle', './images/black_circle.png');
     this.load.image('floor', './images/floor.png');
     this.load.image('wall', './images/wall1.png');
-    this.load.image('black', './images/無題219_20261006225322.png')
+    this.load.image('black', './images/black.png');
 }
 
 function create() {
@@ -265,7 +265,10 @@ function update(time, delta) {
 
             for (let col = 0; col < this.mapData[row].length; col++) {
 
-                if (this.mapData[row][col] !== 1) {
+                if (
+                    this.mapData[row][col] !== 1 &&
+                    this.mapData[row][col] !== 2
+                ) {
                     continue;
                 }
 
