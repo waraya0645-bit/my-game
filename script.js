@@ -34,7 +34,7 @@ function preload() {
 }
 
 function create() {
-    this mapOffsetY = 4;
+    this.mapOffsetY = 4;
     const tileSize = 64;
     this.wallTiles = (tile) =>
         tile >= 100 && tile < 200;
@@ -468,7 +468,7 @@ function update(time, delta) {
 
         for (let col = 0; col < this.mapData[row].length; col++) {
 
-            if (!this.wallTiles.includes(this.mapData[row][col])) {
+            if (!this.wallTiles(this.mapData[row][col])) {
                 continue;
             }
 
