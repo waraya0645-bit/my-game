@@ -28,8 +28,7 @@ function preload() {
     this.load.image('blackCircle', './images/black_circle.png');
     this.load.image('0', './images/black.png');
     this.load.image('1', './images/floor.png');
-    this.load.image('2', './images/wall1.png');
-    this.load.image('3', './images/stone_wall.png');
+    this.load.image('2', './images/stone_wall.png');
 
     this.load.image('00', './images/dot-Mygame_20261009081021.png');
 }
