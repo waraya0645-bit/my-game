@@ -75,25 +75,28 @@ function create() {
         }
     }
 
-    // ================================
-    // 2. 壁を後から描画
-    // ================================
-    for (let y = 0; y < this.mapData.length; y++) {
-        for (let x = 0; x < this.mapData[y].length; x++) {
-            const tile = this.mapData[y][x];
+// ================================
+// 2. 高さのある壁を描画
+// ================================
+this.wallImages = [];
 
-            if (tile < 101 || tile >= 200) continue;
+for (let y = 0; y < this.mapData.length; y++) {
+    for (let x = 0; x < this.mapData[y].length; x++) {
+        const tile = this.mapData[y][x];
 
-            this.add.image(
-                x * tileSize + 32,
-                y * tileSize + 32 + this.mapOffsetY - 32,
-                String(tile)
-            );
-            // 足元の位置を保存
-            wall.footY = y * tileSize + 64 + this.mapOffsetY;
-            this.wallImages.push(wall);
-        }
+        if (tile < 101 || tile >= 200) continue;
+
+        const wall = this.add.image(
+            x * tileSize + 32,
+            y * tileSize + 32 + this.mapOffsetY - 32,
+            String(tile)
+        );
+
+        // 足元の位置を保存
+        wall.footY = y * tileSize + 64 + this.mapOffsetY;
+        this.wallImages.push(wall);
     }
+}
 
     for (const obj of this.objects) {
         obj.x = obj.tileX * tileSize + 32;
