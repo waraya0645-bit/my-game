@@ -29,7 +29,7 @@ function preload() {
     this.load.image('0', './images/black.png');
     this.load.image('1', './images/floor.png');
     this.load.image('2', './images/wall1.png');
-    this.load.image('3', './images/stone_wall');
+    this.load.image('3', './images/stone_wall.png');
 
     this.load.image('00', './images/dot-Mygame_20261009081021.png');
 }
@@ -68,7 +68,7 @@ for (let y = 0; y < this.mapData.length; y++) {
         const tile = this.mapData[y][x];
 
         // 壁タイルは後で描画する
-        if (tile === 1) {
+        if (tile === 2) {
             continue;
         }
 
