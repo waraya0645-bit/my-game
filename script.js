@@ -69,7 +69,7 @@ function create() {
 
             this.add.image(
                 x * tileSize + 32,
-                y * tileSize + 32 + this.mapOffsetY - 32,
+                y * tileSize + 32 + this.mapOffsetY,
                 String(tile)
             );
         }
@@ -86,7 +86,7 @@ function create() {
 
             this.add.image(
                 x * tileSize + 32,
-                y * tileSize + 32 + this.mapOffsetY,
+                y * tileSize + 32 + this.mapOffsetY - 32,
                 String(tile)
             );
         }
