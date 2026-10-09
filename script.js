@@ -41,7 +41,7 @@ function create() {
     this.objects = [
         {
         tileX: 4,tileY: 5,image: '00',
-        hitboxWidth: 30,hitboxHeight: 30
+        hitboxWidth: 31,hitboxHeight: 30
         },
     ];
     this.mapData = [
