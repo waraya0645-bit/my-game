@@ -26,9 +26,10 @@ function preload() {
     this.load.image('player', './images/IMG_0410.png');
     this.load.image('whiteCircle', './images/white_circle.png');
     this.load.image('blackCircle', './images/black_circle.png');
-    this.load.image('0', './images/floor.png');
-    this.load.image('1', './images/wall1.png');
-    this.load.image('2', './images/black.png');
+    this.load.image('0', './images/black.png');
+    this.load.image('1', './images/floor.png');
+    this.load.image('2', './images/wall1.png');
+    this.load.image('3', './images/stone_wall');
 
     this.load.image('00', './images/dot-Mygame_20261009081021.png');
 }
