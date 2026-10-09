@@ -39,7 +39,10 @@ function create() {
     this.wallTiles = [1, 2,];
     // オブジェクトの配置
     this.objects = [
-        {tileX: 4,tileY: 5,image: '00'},
+        {
+        tileX: 4,tileY: 5,image: '00'
+        hitboxWidth: 32,hitboxHeight: 32
+        },
     ];
     this.mapData = [
     [2,1,1,1,1,2,2,2,1,1,1,1,1,1,2,2,2,2],
@@ -66,9 +69,12 @@ function create() {
     }
 
     for (const obj of this.objects) {
+        obj.x = obj.tileX * 64 + 32;
+        obj.y = obj.tileY * 64 + 32 + this.mapOffsetY;
+
         this.add.image(
-            obj.tileX * 64 + 32,
-            obj.tileY * 64 + 32 + this.mapOffsetY,
+            obj.x,
+            obj.y,
             obj.image
         );
     }
@@ -289,6 +295,28 @@ function update(time, delta) {
                 }
             }
         }
+        // オブジェクトとの衝突判定
+        for (const obj of this.objects) {
+            const left = obj.x - obj.hitboxWidth / 2;
+            const right = obj.x + obj.hitboxWidth / 2;
+            const top = obj.y - obj.hitboxHeight / 2;
+            const bottom = obj.y + obj.hitboxHeight / 2;
+
+            if (
+                x + halfSize > left &&
+                x - halfSize < right &&
+                y + halfSize > top &&        
+                y - halfSize < bottom    
+            ) {       
+                return {
+                    hit: true,           
+                    left,            
+                    right,
+                    top,
+                    bottom
+                };
+            }
+        }
 
         return {
             hit: false
@@ -402,18 +430,15 @@ function update(time, delta) {
     let offsetX = 0;
     let offsetY = 0;
 
-    const bodyLeft =
-        this.playerBody.x - halfSize;
+    const bodyLeft = this.playerBody.x - halfSize;
+    const bodyRight = this.playerBody.x + halfSize;
+    const bodyTop = this.playerBody.y - halfSize;
+    const bodyBottom = this.playerBody.y + halfSize;
 
-    const bodyRight =
-        this.playerBody.x + halfSize;
-
-    const bodyTop =
-        this.playerBody.y - halfSize;
-
-    const bodyBottom =
-        this.playerBody.y + halfSize;
-
+    const objectLeft = obj.x - obj.hitboxWidth / 2;
+    const objectRight = obj.x + obj.hitboxWidth / 2;
+    const objectTop = obj.y - obj.hitboxHeight / 2;
+    const objectBottom = obj.y + obj.hitboxHeight / 2;
 
     // --------------------------------
     // 近くの壁だけ調べる
