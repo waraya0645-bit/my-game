@@ -89,6 +89,9 @@ function create() {
                 y * tileSize + 32 + this.mapOffsetY - 32,
                 String(tile)
             );
+            // 足元の位置を保存
+            wall.footY = y * tileSize + 64 + this.mapOffsetY;
+            this.wallImages.push(wall);
         }
     }
 
@@ -663,4 +666,16 @@ for (const obj of this.objects) {
 
     this.player.y =
         this.playerBody.y + offsetY;
+// ================================
+// 壁とプレイヤーの重なり順
+// ================================
+for (const wall of this.wallImages) {
+    if (this.playerBody.y < wall.footY) {
+        wall.setDepth(1);
+    } else {
+        wall.setDepth(3);
+    }
+}
+
+this.player.setDepth(2);
 }
