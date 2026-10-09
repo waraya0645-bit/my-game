@@ -542,6 +542,92 @@ function update(time, delta) {
         }
     }
 
+// ================================
+// 家具との見た目の補正
+// ================================
+
+for (const obj of this.objects) {
+
+    const objectLeft =
+        obj.x - obj.hitboxWidth / 2;
+
+    const objectRight =
+        obj.x + obj.hitboxWidth / 2;
+
+    const objectTop =
+        obj.y - obj.hitboxHeight / 2;
+
+    const objectBottom =
+        obj.y + obj.hitboxHeight / 2;
+
+
+    // 左側の家具
+    const leftGap =
+        objectLeft - bodyRight;
+
+    if (
+        leftGap >= 0 &&
+        leftGap < visualOffset &&
+        bodyBottom > objectTop &&
+        bodyTop < objectBottom
+    ) {
+        offsetX = Math.min(
+            offsetX,
+            -(visualOffset - leftGap)
+        );
+    }
+
+
+    // 右側の家具
+    const rightGap =
+        bodyLeft - objectRight;
+
+    if (
+        rightGap >= 0 &&
+        rightGap < visualOffset &&
+        bodyBottom > objectTop &&
+        bodyTop < objectBottom
+    ) {
+        offsetX = Math.max(
+            offsetX,
+            visualOffset - rightGap
+        );
+    }
+
+
+    // 上側の家具
+    const topGap =
+        objectTop - bodyBottom;
+
+    if (
+        topGap >= 0 &&
+        topGap < visualOffset &&
+        bodyRight > objectLeft &&
+        bodyLeft < objectRight
+    ) {
+        offsetY = Math.min(
+            offsetY,
+            -(visualOffset - topGap)
+        );
+    }
+
+
+    // 下側の家具
+    const bottomGap =
+        bodyTop - objectBottom;
+
+    if (
+        bottomGap >= 0 &&
+        bottomGap < visualOffset &&
+        bodyRight > objectLeft &&
+        bodyLeft < objectRight
+    ) {
+        offsetY = Math.max(
+            offsetY,
+            visualOffset - bottomGap
+        );
+    }
+}
 
     // ================================
     // プレイヤー画像を表示
