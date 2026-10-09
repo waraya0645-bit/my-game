@@ -57,16 +57,49 @@ function create() {
     [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
     ];
     const tileSize = 64;
-    for (let y = 0; y < this.mapData.length; y++) {
-        for (let x = 0; x < this.mapData[y].length; x++) {
 
-            this.add.image(
-                x * tileSize + tileSize / 2,
-                y * tileSize + tileSize / 2 + this.mapOffsetY,
-                String(this.mapData[y][x])
-            );
+// ================================
+// 1. 床と黒い領域を先に描画
+// ================================
+
+for (let y = 0; y < this.mapData.length; y++) {
+    for (let x = 0; x < this.mapData[y].length; x++) {
+
+        const tile = this.mapData[y][x];
+
+        // 壁タイルは後で描画する
+        if (tile === 1) {
+            continue;
         }
+
+        this.add.image(
+            x * tileSize + tileSize / 2,
+            y * tileSize + tileSize / 2 + this.mapOffsetY,
+            String(tile)
+        );
     }
+}
+
+// ================================
+// 2. 壁を後から描画
+// ================================
+
+for (let y = 0; y < this.mapData.length; y++) {
+    for (let x = 0; x < this.mapData[y].length; x++) {
+
+        const tile = this.mapData[y][x];
+
+        if (tile !== 1) {
+            continue;
+        }
+
+        this.add.image(
+            x * tileSize + tileSize / 2,
+            y * tileSize + tileSize / 2 + this.mapOffsetY,
+            '1'
+        );
+    }
+}
 
     for (const obj of this.objects) {
         obj.x = obj.tileX * 64 + 32;
