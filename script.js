@@ -26,11 +26,11 @@ function preload() {
     this.load.image('player', './images/IMG_0410.png');
     this.load.image('whiteCircle', './images/white_circle.png');
     this.load.image('blackCircle', './images/black_circle.png');
-    this.load.image('0', './images/black.png');
-    this.load.image('1', './images/floor.png');
-    this.load.image('2', './images/stone_wall.png');
+    this.load.image('0', './images/floor.png');
+    this.load.image('100', './images/black.png');
+    this.load.image('101', './images/stone_wall.png');
 
-    this.load.image('00', './images/dot-Mygame_20261009081021.png');
+    this.load.image('200', './images/dot-Mygame_20261009081021.png');
 }
 
 function create() {
@@ -68,7 +68,7 @@ for (let y = 0; y < this.mapData.length; y++) {
         const tile = this.mapData[y][x];
 
         // 壁タイルは後で描画する
-        if (tile === 2) {
+        if (!(tile >= 100 && tile < 200)) {
             continue;
         }
 
@@ -80,23 +80,17 @@ for (let y = 0; y < this.mapData.length; y++) {
     }
 }
 
-// ================================
-// 2. 壁を後から描画
-// ================================
-
 for (let y = 0; y < this.mapData.length; y++) {
     for (let x = 0; x < this.mapData[y].length; x++) {
 
         const tile = this.mapData[y][x];
 
-        if (tile !== 2) {
-            continue;
-        }
+        if (tile < 2) continue;
 
         this.add.image(
-            x * tileSize + tileSize / 2,
-            y * tileSize + tileSize / 2 + this.mapOffsetY,
-            '2'
+            x * tileSize + 32,
+            y * tileSize + 32 + this.mapOffsetY,
+            String(tile)
         );
     }
 }
