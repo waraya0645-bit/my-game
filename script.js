@@ -34,13 +34,14 @@ function preload() {
 }
 
 function create() {
-    const mapOffsetY = 4;
-    this.mapOffsetY = mapOffsetY;
-    this.wallTiles = [0, 2,];
+    this mapOffsetY = 4;
+    const tileSize = 64;
+    this.wallTiles = (tile) =>
+        tile >= 100 && tile < 200;
     // オブジェクトの配置
     this.objects = [
         {
-        tileX: 4,tileY: 5,image: '00',
+        tileX: 4,tileY: 5,image: '200',
         hitboxWidth: 31,hitboxHeight: 30
         },
     ];
@@ -56,48 +57,44 @@ function create() {
 [100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,100],
 [100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100]
 ];
-    const tileSize = 64;
+    
+    // ================================
+    // 1. 床と黒い領域を描画
+    // ================================
+    for (let y = 0; y < this.mapData.length; y++) {
+        for (let x = 0; x < this.mapData[y].length; x++) {
+            const tile = this.mapData[y][x];
 
-// ================================
-// 1. 床と黒い領域を先に描画
-// ================================
+            if (tile >= 101 && tile < 200) continue;
 
-for (let y = 0; y < this.mapData.length; y++) {
-    for (let x = 0; x < this.mapData[y].length; x++) {
-
-        const tile = this.mapData[y][x];
-
-        // 壁タイルは後で描画する
-        if (!(tile >= 100 && tile < 200)) {
-            continue;
+            this.add.image(
+                x * tileSize + 32,
+                y * tileSize + 32 + this.mapOffsetY,
+                String(tile)
+            );
         }
-
-        this.add.image(
-            x * tileSize + tileSize / 2,
-            y * tileSize + tileSize / 2 + this.mapOffsetY,
-            String(tile)
-        );
     }
-}
 
-for (let y = 0; y < this.mapData.length; y++) {
-    for (let x = 0; x < this.mapData[y].length; x++) {
+    // ================================
+    // 2. 壁を後から描画
+    // ================================
+    for (let y = 0; y < this.mapData.length; y++) {
+        for (let x = 0; x < this.mapData[y].length; x++) {
+            const tile = this.mapData[y][x];
 
-        const tile = this.mapData[y][x];
+            if (tile < 101 || tile >= 200) continue;
 
-        if (tile < 2) continue;
-
-        this.add.image(
-            x * tileSize + 32,
-            y * tileSize + 32 + this.mapOffsetY,
-            String(tile)
-        );
+            this.add.image(
+                x * tileSize + 32,
+                y * tileSize + 32 + this.mapOffsetY,
+                String(tile)
+            );
+        }
     }
-}
 
     for (const obj of this.objects) {
-        obj.x = obj.tileX * 64 + 32;
-        obj.y = obj.tileY * 64 + 32 + this.mapOffsetY;
+        obj.x = obj.tileX * tileSize + 32;
+        obj.y = obj.tileY * tileSize + 32 + this.mapOffsetY;
 
         this.add.image(
             obj.x,
@@ -297,7 +294,7 @@ function update(time, delta) {
 
             for (let col = 0; col < this.mapData[row].length; col++) {
 
-                if (!this.wallTiles.includes(this.mapData[row][col])) {
+                if (!this.wallTiles(this.mapData[row][col])) {
                     continue;
                 }
 
@@ -429,11 +426,12 @@ function update(time, delta) {
     if (currentRow) {
 
         const upperWall =
-            this.mapData[tileY - 1]?.[tileX] === 2;
+            this.mapData[tileY - 1]?.[tileX] >= 100 &&
+            this.mapData[tileY - 1]?.[tileX] < 200;
 
         const lowerWall =
-            this.mapData[tileY + 1]?.[tileX] === 2;
-
+            this.mapData[tileY + 1]?.[tileX] >= 100 &&
+            this.mapData[tileY + 1]?.[tileX] < 200;
         const centerY =
             tileY * 64 + 32 + this.mapOffsetY;
 
