@@ -94,6 +94,7 @@ for (let y = 0; y < this.mapData.length; y++) {
 
         // 足元の位置を保存
         wall.footY = y * tileSize + 64 + this.mapOffsetY;
+        wall.setDepth(wall.footY);
         this.wallImages.push(wall);
     }
 }
@@ -670,16 +671,18 @@ for (const obj of this.objects) {
     this.player.y =
         this.playerBody.y + offsetY;
 
+// ================================
 // 壁とプレイヤーの重なり順
+// ================================
+
+// プレイヤーの足元
 const playerFootY = this.playerBody.y + 32;
 
-for (const wall of this.wallImages) {
-    if (playerFootY < wall.footY) {
-        wall.setDepth(1);
-    } else {
-        wall.setDepth(3);
-    }
-}
+// プレイヤーの足元を深度に設定
+this.player.setDepth(playerFootY + 1);
 
-this.player.setDepth(2);
+// 壁は足元の位置を基準に描画
+for (const wall of this.wallImages) {
+    wall.setDepth(wall.footY);
+}
 }
