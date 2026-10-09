@@ -89,14 +89,14 @@ for (let y = 0; y < this.mapData.length; y++) {
 
         const tile = this.mapData[y][x];
 
-        if (tile !== 1) {
+        if (tile !== 2) {
             continue;
         }
 
         this.add.image(
             x * tileSize + tileSize / 2,
             y * tileSize + tileSize / 2 + this.mapOffsetY,
-            '1'
+            '2'
         );
     }
 }
@@ -435,10 +435,10 @@ function update(time, delta) {
     if (currentRow) {
 
         const upperWall =
-            this.mapData[tileY - 1]?.[tileX] === 1;
+            this.mapData[tileY - 1]?.[tileX] === 2;
 
         const lowerWall =
-            this.mapData[tileY + 1]?.[tileX] === 1;
+            this.mapData[tileY + 1]?.[tileX] === 2;
 
         const centerY =
             tileY * 64 + 32 + this.mapOffsetY;
