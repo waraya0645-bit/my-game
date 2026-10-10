@@ -96,6 +96,15 @@ for (let y = 0; y < this.mapData.length; y++) {
 
         if (tile < 101 || tile >= 200) continue;
 
+this.layers.wallCollision.push({
+    tileX: x,
+    tileY: y,
+    x: x * tileSize,
+    y: y * tileSize + this.mapOffsetY,
+    width: tileSize,
+    height: tileSize
+});
+
         const wall = this.add.image(
             x * tileSize + 32,
             y * tileSize + 32 + this.mapOffsetY - 32,
