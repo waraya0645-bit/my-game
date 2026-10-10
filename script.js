@@ -575,9 +575,6 @@ const isColliding = (x, y) => {
         (this.playerBody.y - this.mapOffsetY) / 64
     );
 
-    const currentRow =
-        this.mapData[tileY];
-
     const currentRow = this.layers.wallCollision[tileY];
     if (currentRow) {
     const upperWall = this.layers.wallCollision[tileY - 1]?.[tileX] === 1;
