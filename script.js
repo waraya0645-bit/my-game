@@ -317,76 +317,87 @@ function update(time, delta) {
     const visualOffset = 4;
 
 
-    // ================================
-    // 壁との衝突判定
-    // ================================
+// ================================
+// 壁・装飾物との衝突判定
+// ================================
 
-    const isColliding = (x, y) => {
+const isColliding = (x, y) => {
+    const left = x - halfSize;
+    const right = x + halfSize;
+    const top = y - halfSize;
+    const bottom = y + halfSize;
 
-        const left = x - halfSize;
-        const right = x + halfSize;
-        const top = y - halfSize;
-        const bottom = y + halfSize;
-
-// 壁の当たり判定レイヤーを調べる
-for (
-    let row = 0;
-    row < this.layers.wallCollision.length;
-    row++
-) {
+    // 1. 壁の当たり判定レイヤー
     for (
-        let col = 0;
-        col < this.layers.wallCollision[row].length;
-        col++
+        let row = 0;
+        row < this.layers.wallCollision.length;
+        row++
     ) {
-        if (!this.layers.wallCollision[row][col]) {
-            continue;
-        }
+        for (
+            let col = 0;
+            col < this.layers.wallCollision[row].length;
+            col++
+        ) {
+            if (!this.layers.wallCollision[row][col]) {
+                continue;
+            }
 
-        const wallLeft = col * 64;
-        const wallRight = wallLeft + 64;
-        const wallTop = row * 64 + this.mapOffsetY;
-        const wallBottom = wallTop + 64;
+            const wallLeft = col * 64;
+            const wallRight = wallLeft + 64;
+            const wallTop =
+                row * 64 + this.mapOffsetY;
+            const wallBottom = wallTop + 64;
+
+            if (
+                right > wallLeft &&
+                left < wallRight &&
+                bottom > wallTop &&
+                top < wallBottom
+            ) {
+                return {
+                    hit: true,
+                    left: wallLeft,
+                    right: wallRight,
+                    top: wallTop,
+                    bottom: wallBottom
+                };
+            }
+        }
+    }
+
+    // 2. 装飾物の当たり判定レイヤー
+    for (const object of this.layers.decorationCollision) {
+        const objectLeft =
+            object.x - object.width / 2;
+        const objectRight =
+            object.x + object.width / 2;
+        const objectTop =
+            object.y - object.height / 2;
+        const objectBottom =
+            object.y + object.height / 2;
 
         if (
-            right > wallLeft &&
-            left < wallRight &&
-            bottom > wallTop &&
-            top < wallBottom
+            right > objectLeft &&
+            left < objectRight &&
+            bottom > objectTop &&
+            top < objectBottom
         ) {
             return {
                 hit: true,
-                left: wallLeft,
-                right: wallRight,
-                top: wallTop,
-                bottom: wallBottom
+                left: objectLeft,
+                right: objectRight,
+                top: objectTop,
+                bottom: objectBottom
             };
         }
     }
-}
-}
-        // 装飾物の当たり判定レイヤーを調べる
-for (const object of this.layers.decorationCollision) {
-    const objectLeft = object.x - object.width / 2;
-    const objectRight = object.x + object.width / 2;
-    const objectTop = object.y - object.height / 2;
-    const objectBottom = object.y + object.height / 2;
 
-    if (
-        right > objectLeft &&
-        left < objectRight &&
-        bottom > objectTop &&
-        top < objectBottom
-    ) {
-        return {
-            hit: true,
-            left: objectLeft,
-            right: objectRight,
-            top: objectTop,
-            bottom: objectBottom
-        };
-    }
-}
+    // 3. 何にも衝突していない
+    return {
+        hit: false
+    };
+};
+    
     // ================================
     // X方向へ移動
     // ================================
