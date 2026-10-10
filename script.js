@@ -611,7 +611,9 @@ for (
         col++
     ) {
         // この下は今までの壁の見た目補正処理を残す
-
+        if (!this.layers.wallCollision[row][col]) {
+            continue;
+        }
             const wallLeft = col * 64;
             const wallRight = wallLeft + 64;
             const wallTop = row * 64 + this.mapOffsetY;
