@@ -49,7 +49,7 @@ this.layers = {
     // オブジェクトの配置
     this.objects = [
         {
-        tileX: 4,tileY: 5,image: '200',
+        tileX: 12,tileY: 4,image: '200',
         hitboxWidth: 31,hitboxHeight: 30
         },
     ];
