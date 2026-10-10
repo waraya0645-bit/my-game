@@ -4,7 +4,7 @@ const config = {
     width: 1152,
     height: 648,
     parent: 'game',
-    backgroundColor: '#000000',
+    backgroundColor: '#c0c0c0',
 
     pixelArt: true,
 
