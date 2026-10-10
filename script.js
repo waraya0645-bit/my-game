@@ -49,7 +49,7 @@ this.layers = {
     // オブジェクトの配置
     this.objects = [
         {
-        tileX: 12,tileY: 3,image: '200',
+        tileX: 12,tileY: 5,image: '200',
         hitboxWidth: 31,hitboxHeight: 30
         },
     ];
@@ -141,7 +141,7 @@ for (const obj of this.objects) {
     });
 }
     
-    const player = this.add.image(288, 292, 'player');
+    const player = this.add.image(288, 356, 'player');
 
     this.player = player;
 
