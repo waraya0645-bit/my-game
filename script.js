@@ -511,13 +511,21 @@ const isColliding = (x, y) => {
     // 近くの壁だけ調べる
     // --------------------------------
 
-    for (let row = 0; row < this.mapData.length; row++) {
+for (
+    let row = 0;
+    row < this.layers.wallCollision.length;
+    row++
+) {
+    for (
+        let col = 0;
+        col < this.layers.wallCollision[row].length;
+        col++
+    ) {
+        if (!this.layers.wallCollision[row][col]) {
+            continue;
+        }
 
-        for (let col = 0; col < this.mapData[row].length; col++) {
-
-            if (!this.wallTiles(this.mapData[row][col])) {
-                continue;
-            }
+        // この下は今までの壁の見た目補正処理を残す
 
             const wallLeft = col * 64;
             const wallRight = wallLeft + 64;
@@ -615,27 +623,24 @@ const isColliding = (x, y) => {
     }
 
 // ================================
-// 家具との見た目の補正
+// 装飾物との見た目の補正
 // ================================
 
-for (const obj of this.objects) {
-
+for (const obj of this.layers.decorationCollision) {
     const objectLeft =
-        obj.x - obj.hitboxWidth / 2;
+        obj.x - obj.width / 2;
 
     const objectRight =
-        obj.x + obj.hitboxWidth / 2;
+        obj.x + obj.width / 2;
 
     const objectTop =
-        obj.y - obj.hitboxHeight / 2;
+        obj.y - obj.height / 2;
 
     const objectBottom =
-        obj.y + obj.hitboxHeight / 2;
+        obj.y + obj.height / 2;
 
-
-    // 左側の家具
-    const leftGap =
-        objectLeft - bodyRight;
+    // 左側の装飾物
+    const leftGap = objectLeft - bodyRight;
 
     if (
         leftGap >= 0 &&
@@ -649,10 +654,8 @@ for (const obj of this.objects) {
         );
     }
 
-
-    // 右側の家具
-    const rightGap =
-        bodyLeft - objectRight;
+    // 右側の装飾物
+    const rightGap = bodyLeft - objectRight;
 
     if (
         rightGap >= 0 &&
@@ -666,10 +669,8 @@ for (const obj of this.objects) {
         );
     }
 
-
-    // 上側の家具
-    const topGap =
-        objectTop - bodyBottom;
+    // 上側の装飾物
+    const topGap = objectTop - bodyBottom;
 
     if (
         topGap >= 0 &&
@@ -683,10 +684,8 @@ for (const obj of this.objects) {
         );
     }
 
-
-    // 下側の家具
-    const bottomGap =
-        bodyTop - objectBottom;
+    // 下側の装飾物
+    const bottomGap = bodyTop - objectBottom;
 
     if (
         bottomGap >= 0 &&
@@ -700,7 +699,6 @@ for (const obj of this.objects) {
         );
     }
 }
-
     // ================================
     // プレイヤー画像を表示
     // ================================
