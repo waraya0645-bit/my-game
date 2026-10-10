@@ -115,6 +115,7 @@ this.layers.wallCollision.push({
         wall.footY = y * tileSize + 64 + this.mapOffsetY;
         wall.setDepth(wall.footY);
         this.wallImages.push(wall);
+        this.layers.wallVisual.push(wall);
     }
 }
 
@@ -128,6 +129,17 @@ this.layers.wallCollision.push({
             obj.image
         );
     }
+    // 装飾の当たり判定レイヤー
+for (const obj of this.objects) {
+    this.layers.decorationCollision.push({
+        tileX: obj.tileX,
+        tileY: obj.tileY,
+        x: obj.tileX * 64 + 32,
+        y: obj.tileY * 64 + 32 + this.mapOffsetY,
+        width: obj.hitboxWidth,
+        height: obj.hitboxHeight
+    });
+}
     
     const player = this.add.image(288, 292, 'player');
 
