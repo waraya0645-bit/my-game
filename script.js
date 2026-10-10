@@ -74,46 +74,79 @@ const makeMap = (defaultValue) =>
         () => Array(18).fill(defaultValue)
     );
 
-// 1. 床の見た目：タイル番号
-this.floorMapData = makeMap(0);
-this.floorMapData[2][3] = 1;    // そのマスに床タイル1
-this.floorMapData[2][4] = null; // そのマスの床を表示しない
-// 2. 壁の当たり判定：trueなら通行不可
-this.wallCollisionMapData = makeMap(false);
+// 1. 床の見た目
+this.floorMapData = [
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+];
 
-// 3. 壁の見た目：タイル番号。nullなら透明
-this.wallVisualMapData = makeMap(null);
+// 2. 壁の当たり判定
+// 0 = 通行可能、1 = 通行不可
+this.wallCollisionMapData = [
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+];
 
-// 4. 装飾物の当たり判定：nullなら判定なし
-this.decorationCollisionMapData = makeMap(null);
+// 3. 壁の見た目
+// 0 = 画像なし、100以上 = 壁画像の番号
+this.wallVisualMapData = [
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+];
 
-// 5. 装飾物の見た目：画像キー。nullなら画像なし
-this.decorationVisualMapData = makeMap(null);
+// 4. 装飾物の当たり判定
+// 0 = 判定なし、1 = 判定あり
+this.decorationCollisionMapData = [
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+];
 
-// ================================
-// マップ設定例
-// [行][列]で指定。番号は0から数える。
-// ================================
-
-// 通常の壁：見た目も判定もあり
-this.wallCollisionMapData[4][5] = true;
-this.wallVisualMapData[4][5] = 100;
-
-// 透明な壁にする場合：判定だけあり
-// this.wallCollisionMapData[2][3] = true;
-
-// 見た目だけの壁：判定なし
-// this.wallVisualMapData[2][4] = 100;
-
-// 画像だけある装飾物
-this.decorationVisualMapData[5][4] = '200';
-
-// 判定だけある装飾物
-this.decorationCollisionMapData[6][4] = {
-    width: 31,
-    height: 30
-};
-
+// 5. 装飾物の見た目
+// 0 = 画像なし、200など = 画像キー
+this.decorationVisualMapData = [
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+];
 // ================================
 // 1. 床の見た目を描画
 // ================================
@@ -137,66 +170,91 @@ for (let y = 0; y < this.floorMapData.length; y++) {
     }
 }
 
-// 壁の当たり判定レイヤー
-// true = 通行不可、false = 通行可能
-this.layers.wallCollision = this.mapData.map(row =>
-    row.map(tile => tile >= 100 && tile < 200)
-);
-
 // ================================
-// 2. 壁を描画
+// 2. 壁の当たり判定レイヤー
 // ================================
 
-for (let y = 0; y < this.mapData.length; y++) {
-    for (let x = 0; x < this.mapData[y].length; x++) {
-        const tile = this.mapData[y][x];
+// wallCollisionMapDataをそのまま使用する
+this.layers.wallCollision =
+    this.wallCollisionMapData;
 
-        if (tile < 100 || tile >= 200) continue;
+
+// ================================
+// 3. 壁の見た目レイヤー
+// ================================
+
+for (
+    let y = 0;
+    y < this.wallVisualMapData.length;
+    y++
+) {
+    for (
+        let x = 0;
+        x < this.wallVisualMapData[y].length;
+        x++
+    ) {
+        const tile = this.wallVisualMapData[y][x];
+
+        // 0は透明、100以上は壁画像
+        if (tile === 0) {
+            continue;
+        }
 
         const wall = this.add.image(
             x * tileSize + 32,
-            y * tileSize + 32 + this.mapOffsetY - 32,
+            y * tileSize + this.mapOffsetY,
             String(tile)
         );
 
-        // 足元の位置を保存
-        wall.footY = y * tileSize + 64 + this.mapOffsetY;
+        wall.footY =
+            y * tileSize + 64 + this.mapOffsetY;
+
         wall.setDepth(wall.footY);
+
         this.layers.wallVisual.push(wall);
     }
 }
+    
+// 4. 装飾の表示レイヤー
+for (let y = 0; y < this.decorationVisualMapData.length; y++) {
+    for (let x = 0; x < this.decorationVisualMapData[y].length; x++) {
+        const tile = this.decorationVisualMapData[y][x];
 
-// 装飾の見た目レイヤー
-for (const obj of this.objects) {
-    obj.x = obj.tileX * tileSize + 32;
-    obj.y = obj.tileY * tileSize + 32 + this.mapOffsetY;
+        // 0は画像なし
+        if (tile === 0) continue;
 
-    const decorationImage = this.add.image(
-        obj.x,
-        obj.y,
-        obj.image
-    );
+        const decorationImage = this.add.image(
+            x * tileSize + 32,
+            y * tileSize + 32 + this.mapOffsetY,
+            String(tile)
+        );
 
-    this.layers.decorationVisual.push(decorationImage);
+        this.layers.decorationVisual.push(decorationImage);
+    }
 }
-    // 装飾の当たり判定レイヤー
-for (const obj of this.objects) {
-    this.layers.decorationCollision.push({
-        tileX: obj.tileX,
-        tileY: obj.tileY,
-        x: obj.tileX * 64 + 32,
-        y: obj.tileY * 64 + 32 + this.mapOffsetY,
-        width: obj.hitboxWidth,
-        height: obj.hitboxHeight
-    });
+    
+// 5. 装飾の当たり判定レイヤー
+for (let y = 0; y < this.decorationCollisionMapData.length; y++) {
+    for (let x = 0; x < this.decorationCollisionMapData[y].length; x++) {
+        const tile = this.decorationCollisionMapData[y][x];
+
+        // 1のマスだけ当たり判定を作る
+        if (tile !== 1) continue;
+
+        this.layers.decorationCollision.push({
+            tileX: x,
+            tileY: y,
+            x: x * tileSize + 32,
+            y: y * tileSize + 32 + this.mapOffsetY,
+            width: tileSize,
+            height: tileSize
+        });
+    }
 }
     
     const player = this.add.image(288, 324, 'player');
-
     this.player = player;
-
     // 当たり判定用の座標
-    
     this.playerBody = {
         x: 288,
         y: 324
@@ -205,9 +263,6 @@ for (const obj of this.objects) {
     // =========================
     // スティック
     // =========================
-
-    // 最初は画面中央
-
     this.stickX = this.scale.width / 6;
     this.stickY = this.scale.height * 3 / 4;
 
@@ -523,12 +578,10 @@ const isColliding = (x, y) => {
     const currentRow =
         this.mapData[tileY];
 
+    const currentRow = this.layers.wallCollision[tileY];
     if (currentRow) {
-
-        const upperWall =
-    this.layers.wallCollision[tileY - 1]?.[tileX] === true;
-        const lowerWall =
-    this.layers.wallCollision[tileY + 1]?.[tileX] === true;
+    const upperWall = this.layers.wallCollision[tileY - 1]?.[tileX] === 1;
+    const lowerWall = this.layers.wallCollision[tileY + 1]?.[tileX] === 1;
         const centerY =
             tileY * 64 + 32 + this.mapOffsetY;
 
