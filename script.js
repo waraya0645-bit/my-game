@@ -55,7 +55,7 @@ this.layers = {
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,100,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -63,25 +63,78 @@ this.layers = {
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ];
+// ================================
+// 独立した5つのマップデータ
+// 現在のマップサイズ：横18マス、縦10マス
+// ================================
 
-    // ================================
-    // 1. 床と黒い領域を描画
-    // ================================
-    for (let y = 0; y < this.mapData.length; y++) {
-        for (let x = 0; x < this.mapData[y].length; x++) {
-            const tile = this.mapData[y][x];
+const makeMap = (defaultValue) =>
+    Array.from(
+        { length: 10 },
+        () => Array(18).fill(defaultValue)
+    );
 
-            if (tile >= 100 && tile < 200) continue;;
+// 1. 床の見た目：タイル番号
+this.floorMapData = makeMap(0);
 
-const floorImage = this.add.image(
-    x * tileSize + 32,
-    y * tileSize + 32 + this.mapOffsetY,
-    String(tile)
-);
+// 2. 壁の当たり判定：trueなら通行不可
+this.wallCollisionMapData = makeMap(false);
 
-this.layers.floor.push(floorImage);
+// 3. 壁の見た目：タイル番号。nullなら透明
+this.wallVisualMapData = makeMap(null);
+
+// 4. 装飾物の当たり判定：nullなら判定なし
+this.decorationCollisionMapData = makeMap(null);
+
+// 5. 装飾物の見た目：画像キー。nullなら画像なし
+this.decorationVisualMapData = makeMap(null);
+
+// ================================
+// マップ設定例
+// [行][列]で指定。番号は0から数える。
+// ================================
+
+// 通常の壁：見た目も判定もあり
+this.wallCollisionMapData[4][5] = true;
+this.wallVisualMapData[4][5] = 100;
+
+// 透明な壁にする場合：判定だけあり
+// this.wallCollisionMapData[2][3] = true;
+
+// 見た目だけの壁：判定なし
+// this.wallVisualMapData[2][4] = 100;
+
+// 画像だけある装飾物
+this.decorationVisualMapData[5][4] = '200';
+
+// 判定だけある装飾物
+this.decorationCollisionMapData[6][4] = {
+    width: 31,
+    height: 30
+};
+
+// ================================
+// 1. 床の見た目を描画
+// ================================
+
+for (let y = 0; y < this.floorMapData.length; y++) {
+    for (let x = 0; x < this.floorMapData[y].length; x++) {
+        const tile = this.floorMapData[y][x];
+
+        // nullなら何も描画しない
+        if (tile === null) {
+            continue;
         }
+
+        const floorImage = this.add.image(
+            x * tileSize + 32,
+            y * tileSize + 32 + this.mapOffsetY,
+            String(tile)
+        );
+
+        this.layers.floor.push(floorImage);
     }
+}
 
 // 壁の当たり判定レイヤー
 // true = 通行不可、false = 通行可能
