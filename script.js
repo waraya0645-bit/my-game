@@ -65,7 +65,7 @@ this.layers = {
 [100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,100],
 [100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100]
 ];
-    
+
     // ================================
     // 1. 床と黒い領域を描画
     // ================================
@@ -73,7 +73,7 @@ this.layers = {
         for (let x = 0; x < this.mapData[y].length; x++) {
             const tile = this.mapData[y][x];
 
-            if (tile >= 101 && tile < 200) continue;
+            if (tile >= 100 && tile < 200) continue;;
 
 const floorImage = this.add.image(
     x * tileSize + 32,
@@ -85,8 +85,14 @@ this.layers.floor.push(floorImage);
         }
     }
 
+// 壁の当たり判定レイヤー
+// true = 通行不可、false = 通行可能
+this.layers.wallCollision = this.mapData.map(row =>
+    row.map(tile => tile >= 100 && tile < 200)
+);
+
 // ================================
-// 2. 高さのある壁を描画
+// 2. 壁を描画
 // ================================
 this.wallImages = [];
 
@@ -94,16 +100,7 @@ for (let y = 0; y < this.mapData.length; y++) {
     for (let x = 0; x < this.mapData[y].length; x++) {
         const tile = this.mapData[y][x];
 
-        if (tile < 101 || tile >= 200) continue;
-
-this.layers.wallCollision.push({
-    tileX: x,
-    tileY: y,
-    x: x * tileSize,
-    y: y * tileSize + this.mapOffsetY,
-    width: tileSize,
-    height: tileSize
-});
+        if (tile < 100 || tile >= 200) continue;
 
         const wall = this.add.image(
             x * tileSize + 32,
@@ -331,64 +328,65 @@ function update(time, delta) {
         const top = y - halfSize;
         const bottom = y + halfSize;
 
-        for (let row = 0; row < this.mapData.length; row++) {
-
-            for (let col = 0; col < this.mapData[row].length; col++) {
-
-                if (!this.wallTiles(this.mapData[row][col])) {
-                    continue;
-                }
-
-                const wallLeft = col * 64;
-                const wallRight = wallLeft + 64;
-                const wallTop = row * 64 + this.mapOffsetY;
-                const wallBottom = row * 64 + 64 + this.mapOffsetY;
-
-                if (
-                    right > wallLeft &&
-                    left < wallRight &&
-                    bottom > wallTop &&
-                    top < wallBottom
-                ) {
-                    return {
-                        hit: true,
-                        left: wallLeft,
-                        right: wallRight,
-                        top: wallTop,
-                        bottom: wallBottom
-                    };
-                }
-            }
-        }
-        // オブジェクトとの衝突判定
-        for (const obj of this.objects) {
-            const left = obj.x - obj.hitboxWidth / 2;
-            const right = obj.x + obj.hitboxWidth / 2;
-            const top = obj.y - obj.hitboxHeight / 2;
-            const bottom = obj.y + obj.hitboxHeight / 2;
-
-            if (
-                x + halfSize > left &&
-                x - halfSize < right &&
-                y + halfSize > top &&        
-                y - halfSize < bottom    
-            ) {       
-                return {
-                    hit: true,           
-                    left,            
-                    right,
-                    top,
-                    bottom
-                };
-            }
+// 壁の当たり判定レイヤーを調べる
+for (
+    let row = 0;
+    row < this.layers.wallCollision.length;
+    row++
+) {
+    for (
+        let col = 0;
+        col < this.layers.wallCollision[row].length;
+        col++
+    ) {
+        if (!this.layers.wallCollision[row][col]) {
+            continue;
         }
 
+        const wallLeft = col * 64;
+        const wallRight = wallLeft + 64;
+        const wallTop = row * 64 + this.mapOffsetY;
+        const wallBottom = wallTop + 64;
+
+        if (
+            right > wallLeft &&
+            left < wallRight &&
+            bottom > wallTop &&
+            top < wallBottom
+        ) {
+            return {
+                hit: true,
+                left: wallLeft,
+                right: wallRight,
+                top: wallTop,
+                bottom: wallBottom
+            };
+        }
+    }
+}
+}
+        // 装飾物の当たり判定レイヤーを調べる
+for (const object of this.layers.decorationCollision) {
+    const objectLeft = object.x - object.width / 2;
+    const objectRight = object.x + object.width / 2;
+    const objectTop = object.y - object.height / 2;
+    const objectBottom = object.y + object.height / 2;
+
+    if (
+        right > objectLeft &&
+        left < objectRight &&
+        bottom > objectTop &&
+        top < objectBottom
+    ) {
         return {
-            hit: false
+            hit: true,
+            left: objectLeft,
+            right: objectRight,
+            top: objectTop,
+            bottom: objectBottom
         };
-    };
-
-
+    }
+}
     // ================================
     // X方向へ移動
     // ================================
@@ -467,12 +465,9 @@ function update(time, delta) {
     if (currentRow) {
 
         const upperWall =
-            this.mapData[tileY - 1]?.[tileX] >= 100 &&
-            this.mapData[tileY - 1]?.[tileX] < 200;
-
+    this.layers.wallCollision[tileY - 1]?.[tileX] === true;
         const lowerWall =
-            this.mapData[tileY + 1]?.[tileX] >= 100 &&
-            this.mapData[tileY + 1]?.[tileX] < 200;
+    this.layers.wallCollision[tileY + 1]?.[tileX] === true;
         const centerY =
             tileY * 64 + 32 + this.mapOffsetY;
 
@@ -704,19 +699,19 @@ for (const obj of this.objects) {
 
     this.player.y =
         this.playerBody.y + offsetY;
-
-// ================================
-// 壁とプレイヤーの重なり順
-// ================================
-
-// プレイヤーの足元
+// プレイヤーの足元を基準に描画順を決める
 const playerFootY = this.playerBody.y + 32;
-
-// プレイヤーの足元を深度に設定
 this.player.setDepth(playerFootY + 1);
 
-// 壁は足元の位置を基準に描画
-for (const wall of this.wallImages) {
+// 壁の描画順
+for (const wall of this.layers.wallVisual) {
     wall.setDepth(wall.footY);
+}
+
+// 装飾物の描画順
+for (const decoration of this.layers.decorationVisual) {
+    decoration.setDepth(
+        decoration.y + decoration.displayHeight / 2
+    );
 }
 }
