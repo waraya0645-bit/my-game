@@ -76,7 +76,8 @@ const makeMap = (defaultValue) =>
 
 // 1. 床の見た目：タイル番号
 this.floorMapData = makeMap(0);
-
+this.floorMapData[2][3] = 1;    // そのマスに床タイル1
+this.floorMapData[2][4] = null; // そのマスの床を表示しない
 // 2. 壁の当たり判定：trueなら通行不可
 this.wallCollisionMapData = makeMap(false);
 
