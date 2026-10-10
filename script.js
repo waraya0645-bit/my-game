@@ -119,16 +119,19 @@ this.layers.wallCollision.push({
     }
 }
 
-    for (const obj of this.objects) {
-        obj.x = obj.tileX * tileSize + 32;
-        obj.y = obj.tileY * tileSize + 32 + this.mapOffsetY;
+// 装飾の見た目レイヤー
+for (const obj of this.objects) {
+    obj.x = obj.tileX * tileSize + 32;
+    obj.y = obj.tileY * tileSize + 32 + this.mapOffsetY;
 
-        this.add.image(
-            obj.x,
-            obj.y,
-            obj.image
-        );
-    }
+    const decorationImage = this.add.image(
+        obj.x,
+        obj.y,
+        obj.image
+    );
+
+    this.layers.decorationVisual.push(decorationImage);
+}
     // 装飾の当たり判定レイヤー
 for (const obj of this.objects) {
     this.layers.decorationCollision.push({
