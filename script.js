@@ -517,17 +517,12 @@ for (
         col < this.layers.wallCollision[row].length;
         col++
     ) {
-        if (!this.layers.wallCollision[row][col]) {
-            continue;
-        }
-
         // この下は今までの壁の見た目補正処理を残す
 
             const wallLeft = col * 64;
             const wallRight = wallLeft + 64;
             const wallTop = row * 64 + this.mapOffsetY;
             const wallBottom = row * 64 + 64 + this.mapOffsetY;
-
 
             // ============================
             // 左側の壁
@@ -550,7 +545,6 @@ for (
                     );
             }
 
-
             // ============================
             // 右側の壁
             // ============================
@@ -572,7 +566,6 @@ for (
                     );
             }
 
-
             // ============================
             // 上側の壁
             // ============================
@@ -593,7 +586,6 @@ for (
                         -(visualOffset - topGap)
                     );
             }
-
 
             // ============================
             // 下側の壁
