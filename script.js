@@ -34,6 +34,14 @@ function preload() {
 }
 
 function create() {
+    // レイヤー管理
+this.layers = {
+    floor: [],
+    wallCollision: [],
+    wallVisual: [],
+    decorationCollision: [],
+    decorationVisual: []
+};
     this.mapOffsetY = 4;
     const tileSize = 64;
     this.wallTiles = (tile) =>
@@ -67,11 +75,13 @@ function create() {
 
             if (tile >= 101 && tile < 200) continue;
 
-            this.add.image(
-                x * tileSize + 32,
-                y * tileSize + 32 + this.mapOffsetY,
-                String(tile)
-            );
+const floorImage = this.add.image(
+    x * tileSize + 32,
+    y * tileSize + 32 + this.mapOffsetY,
+    String(tile)
+);
+
+this.layers.floor.push(floorImage);
         }
     }
 
