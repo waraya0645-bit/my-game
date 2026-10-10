@@ -44,8 +44,6 @@ this.layers = {
 };
     this.mapOffsetY = 4;
     const tileSize = 64;
-    this.wallTiles = (tile) =>
-        tile >= 100 && tile < 200;
     // オブジェクトの配置
     this.objects = [
         {
@@ -94,7 +92,6 @@ this.layers.wallCollision = this.mapData.map(row =>
 // ================================
 // 2. 壁を描画
 // ================================
-this.wallImages = [];
 
 for (let y = 0; y < this.mapData.length; y++) {
     for (let x = 0; x < this.mapData[y].length; x++) {
@@ -111,7 +108,6 @@ for (let y = 0; y < this.mapData.length; y++) {
         // 足元の位置を保存
         wall.footY = y * tileSize + 64 + this.mapOffsetY;
         wall.setDepth(wall.footY);
-        this.wallImages.push(wall);
         this.layers.wallVisual.push(wall);
     }
 }
